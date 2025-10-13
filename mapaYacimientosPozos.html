@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Vaca Muerta — Yacimientos y Pozos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+  <style>
+    html,body,#map { height:100%; margin:0; padding:0; }
+    .legend { background:white; padding:8px; border-radius:6px; box-shadow:0 0 6px rgba(0,0,0,0.2); font-size:13px; }
+    .legend .sw { display:inline-block; width:14px; height:14px; margin-right:6px; border-radius:50%; vertical-align:middle; }
+    .control-panel { position:absolute; top:10px; left:10px; z-index:1000; }
+    .btn { background:#fff; padding:6px 8px; border-radius:4px; margin-bottom:6px; display:block; box-shadow:0 1px 3px rgba(0,0,0,0.15); text-decoration:none; color:#222; font-weight:600; }
+  </style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script>
+/* ----------------------------
+  Configuración de colores/tamaños
+-----------------------------*/
+const COLOR_YPF = "#0178D6";
+const COLOR_ARG = "#9BBCDC";
+const COLOR_EXT = "#F4785E";
+const COLOR_UNKNOWN = "#CCCCCC";
+
+function colorFromType(tipo) {
+  if (!tipo) return COLOR_UNKNOWN;
+  tipo = tipo.toUpperCase();
+  if (tipo.includes("YPF")) return COLOR_YPF;
+  if (["ARGENTINA","ARG"].some(x => tipo.includes(x))) return COLOR_ARG;
+  return COLOR_EXT;
+}
+
+// escala de radio para yacimientos (ya calculada en 'radio' por el python)
+// para clusters, usaremos reglas del usuario:
+function clusterSize(count) {
+  if (count < 30) return 30;
+  if (count < 500) return 50;
+  if (count < 1300) return 70;
+  if (count < 2300) return 95;
+  return 120;
+}
+
+/* ----------------------------
+  Mapa base
+-----------------------------*/
+// const map = L.map('map').setView([-38.5, -69.0], 7);
+
+// L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+//   attribution: '&copy; OpenStreetMap, CARTO',
+//   maxZoom: 16
+// }).addTo(map);
+// === Crear mapa base ===
+const map = L.map("map").setView([-37.5, -68.5], 7);
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+    maxZoom: 16
+}).addTo(map);
+L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_terrain_lines/{z}/{x}/{y}{r}.png', {
+    minZoom: 0,
+    maxZoom: 16,
+    attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+// --- Capa de area de Vaca Muerta ---
+fetch("cuenca_neuquina_area_from_zip.geojson")
+    .then(r => r.json())
+    .then(data => {
+        const contornoLayer = L.geoJSON(data, {
+            style: { color:"#dadada", weight:0, fillColor:"#dadada", fillOpacity:0.5 },
+            interactive: false
+            // style: { color:"#666", weight:1, fillColor:"#666", fillOpacity:0.08 }
+        }).bindPopup("<b>Área hidrocarburífera<br>Vaca Muerta</b>");
+        contornoLayer.addTo(map);
+    });
+
+/* ----------------------------
+  Controles UI
+-----------------------------*/
+const controlDiv = L.control({position: 'topright'});
+controlDiv.onAdd = function () {
+  const d = L.DomUtil.create('div','legend');
+  d.innerHTML = `
+    <div style="font-weight:bold; margin-bottom:6px;">Filtro por empresa</div>
+    <label><input id="chkYPF" type="checkbox" checked/> <span class="sw" style="background:${COLOR_YPF}"></span> YPF</label><br>
+    <label><input id="chkARG" type="checkbox" checked/> <span class="sw" style="background:${COLOR_ARG}"></span> Empresas argentinas</label><br>
+    <label><input id="chkEXT" type="checkbox" checked/> <span class="sw" style="background:${COLOR_EXT}"></span> Empresas extranjeras</label><br>
+    <hr style="margin:6px 0"/>
+    <a id="btnReset" class="btn" href="#">Ver todos los yacimientos</a>
+  `;
+  return d;
+};
+controlDiv.addTo(map);
+
+document.getElementById('btnReset').addEventListener('click', (e) => {
+  e.preventDefault();
+  // remove any filtered pozos and show all yacimientos
+  showAllYacimientos();
+});
+
+/* ----------------------------
+  Capas y estructuras
+-----------------------------*/
+// Vamos a crear tres MarkerClusterGroups (uno por tipo de empresa) para los pozos,
+// y tres LayerGroups simples para los yacimientos.
+const clusterYPF = L.markerClusterGroup({
+  iconCreateFunction: clusterIconCreate,
+  disableClusteringAtZoom: 5
+});
+const clusterARG = L.markerClusterGroup({
+  iconCreateFunction: clusterIconCreate,
+  disableClusteringAtZoom: 5
+});
+const clusterEXT = L.markerClusterGroup({
+  iconCreateFunction: clusterIconCreate,
+  disableClusteringAtZoom: 5
+});
+
+const yacYPF = L.layerGroup();
+const yacARG = L.layerGroup();
+const yacEXT = L.layerGroup();
+
+// Grupos visibles por defecto
+let showYPF = true, showARG = true, showEXT = true;
+
+// Guardar GeoJSON completos en memoria
+let allYacimientos = null;
+let allPozos = null;
+
+/* ----------------------------
+  Función cluster iconCreate (color según mayoría en el cluster)
+-----------------------------*/
+function clusterIconCreate(cluster) {
+  const children = cluster.getAllChildMarkers();
+  const count = cluster.getChildCount();
+  
+  let ypf = 0, arg = 0, ext = 0;
+  children.forEach(m => {
+    const tipo = (m.options.tipo_empresa || (m.feature && m.feature.properties.tipo_empresa) || "").toString().toUpperCase();
+    if (tipo.includes("YPF")) ypf++;
+    else if (["VISTA","CAPEX","PLUSPETROL","PETERSEN","PAMPA","PETROARGENTINA","PETROANDINA"].some(x => tipo.includes(x) || tipo.includes("ARG"))) arg++;
+    else ext++;
+  });
+  let color = COLOR_EXT;
+  if (ypf >= arg && ypf >= ext) color = COLOR_YPF;
+  else if (arg >= ypf && arg >= ext) color = COLOR_ARG;
+  
+  const size = clusterSize(count);
+  const html = `<div style="
+      background:${color};
+      opacity:0.95;
+      color:white;
+      border-radius:50%;
+      width:${size}px;
+      height:${size}px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:bold;
+      box-shadow:0 1px 4px rgba(0,0,0,0.4);
+    ">${count}</div>`;
+  return L.divIcon({ html: html, className: 'cluster-icon', iconSize: [size, size]});
+}
+
+/* ----------------------------
+  Cargar GeoJSONs
+-----------------------------*/
+Promise.all([
+  fetch('yacimientos_vm.geojson').then(r => r.json()),
+  fetch('pozos_vm.geojson').then(r => r.json())
+]).then(([yacJson, pozJson]) => {
+  allYacimientos = yacJson;
+  allPozos = pozJson;
+
+  // Crear yacimientos: un círculo por yacimiento
+  createYacimientosLayer(yacJson);
+
+  // Preparar pozos (no los mostramos todos al inicio; se mostrarán al hacer click o al deseleccionar filtros)
+  // Cargamos los pozos en memoria y los asignamos a clusters pero no añadimos al mapa aún.
+  preparePozosClusters(pozJson);
+
+  // añadir las capas de yacimientos visibles según filtros
+  updateYacimientosVisibility();
+}).catch(err => {
+  console.error("Error cargando GeoJSONs:", err);
+});
+
+/* ----------------------------
+  Crear yacimientos (vista inicial)
+-----------------------------*/
+function createYacimientosLayer(yacJson) {
+  // evitar duplicados por nombre
+  const seen = new Set();
+  yacJson.features.forEach(f => {
+    const props = f.properties || {};
+    const yacName = (props.yacimiento || props.yac || "").toString();
+    if (!yacName) return;
+    if (seen.has(yacName)) return;
+    seen.add(yacName);
+
+    const coords = f.geometry && f.geometry.coordinates;
+    if (!coords) return;
+    const lng = coords[0], lat = coords[1];
+
+    const tipo = (props.tipo_dominante || "").toString();
+    const color = props.color || colorFromType(tipo);
+    const radio = props.radio ? Number(props.radio) : 30;
+    // const radio = f.properties.num_pozos < 30 ? 10 :
+    //               f.properties.num_pozos < 500 ? 20 :
+    //               f.properties.num_pozos < 1300 ? 30 :
+    //               f.properties.num_pozos < 2300 ? 40 : 50;
+    // console.log(f.properties);
+    
+
+    // marker del yacimiento
+    const circle = L.circleMarker([lat, lng], {
+      radius: Math.max(6, radio/6), // ajustamos visualmente: radio en el geojson es grande
+    //   radius: radio, // ajustamos visualmente: radio en el geojson es grande
+      fillColor: color,
+      color: "#333",
+      weight: 0.8,
+      fillOpacity: 0.85
+    });
+
+    // popup con info resumen
+    const popupHtml = `
+      <b>Yacimiento:</b> ${yacName}<br>
+      <b>Pozos:</b> ${props.num_pozos || "N/D"}<br>
+      <b>Tipo dominante:</b> ${props.tipo_dominante || "N/D"}
+      <br><i>(Click para ver pozos)</i>
+    `;
+    circle.bindPopup(popupHtml);
+
+    // al click mostrar pozos y hacer zoom
+    circle.on('click', (e) => {
+      // zoom hacia el punto (o hacia un pequeño bbox)
+      map.setView([lat, lng], 12);
+      showPozosForYacimiento(yacName);
+    });
+
+    // Añadir al grupo correspondiente según tipo dominante
+    const tipo_up = (props.tipo_dominante || "").toString().toUpperCase();
+    if (tipo_up.includes("YPF")) yacYPF.addLayer(circle);
+    else if (tipo_up.includes("ARG")) yacARG.addLayer(circle);
+    else yacEXT.addLayer(circle);
+  });
+
+  // agregar todos los grupos al mapa (visibilidad controlada por filtros)
+  yacYPF.addTo(map);
+  yacARG.addTo(map);
+  yacEXT.addTo(map);
+}
+
+/* ----------------------------
+  Preparar pozos en clusters (en memoria)
+-----------------------------*/
+function preparePozosClusters(pozJson) {
+  // iterar features y crear markers dentro del cluster correspondiente
+  pozJson.features.forEach(f => {
+    const p = f.properties || {};
+    const coords = f.geometry && f.geometry.coordinates;
+    if (!coords) return;
+    const lng = coords[0], lat = coords[1];
+    const tipo_empresa = (p.tipo_empresa || p.empresa || "").toString();
+    const color = p.color || colorFromType(tipo_empresa);
+
+    const pet = Number(p.petroleo_m3 || 0);
+    const gas = Number(p.gas_m3 || 0);
+    const totalProd = pet + gas;
+
+    // tamaño de pozo individual según producción (ajustar si se desea)
+    const radius = Math.max(3, Math.log1p(totalProd) * 0.9);
+
+    const marker = L.circleMarker([lat, lng], {
+      radius: radius,
+      fillColor: color,
+      color: "#222",
+      weight: 0.5,
+      fillOpacity: 0.9,
+      tipo_empresa: tipo_empresa  // mantenerlo en options para clusterIconCreate
+    });
+
+    // attach feature for cluster counting
+    marker.feature = f;
+    marker.options.tipo_empresa = tipo_empresa;
+
+    // popup detalle
+    const pozoId = p.pozo || p.idpozo || "Sin ID";
+    const popup = `
+      <b>Pozo:</b> ${pozoId}<br>
+      <b>Yacimiento:</b> ${p.yacimiento || "N/D"}<br>
+      <b>Empresa dueña:</b> ${p.empresa || p.empresa_operadora || "N/D"}<br>
+      <b>Operador:</b> ${p.operador || "N/D"}<br>
+      <b>Petroleo (2024-25):</b> ${pet.toLocaleString()} m³<br>
+      <b>Gas (2024-25):</b> ${gas.toLocaleString()} m³
+    `;
+    marker.bindPopup(popup);
+
+    // elegir cluster según tipo
+    const t = tipo_empresa.toUpperCase();
+    if (t.includes("YPF")) clusterYPF.addLayer(marker);
+    else if (t.includes("ARG") || ["VISTA","CAPEX","PLUSPETROL","PETERSEN","PAMPA","PETROARGENTINA","PETROANDINA"].some(x => t.includes(x))) clusterARG.addLayer(marker);
+    else clusterEXT.addLayer(marker);
+  });
+
+  // Por defecto no añadir clusters al mapa; se añadirán cuando el usuario haga click en un yacimiento
+}
+
+/* ----------------------------
+  Mostrar pozos de un yacimiento al click
+-----------------------------*/
+let currentShownYacimiento = null;
+let activePozosLayers = []; // guardamos los clusters activos en el mapa
+
+function showPozosForYacimiento(yacName) {
+// Si ya hay pozos mostrados, removerlos del mapa antes de cargar nuevos
+  if (activePozosLayers.length > 0) {
+    activePozosLayers.forEach(c => {
+      try { map.removeLayer(c); } catch (e) {}
+    });
+    activePozosLayers = [];
+  }
+  currentShownYacimiento = yacName;
+
+  // Vaciar clusters actuales del mapa
+  if (map.hasLayer(clusterYPF)) map.removeLayer(clusterYPF);
+  if (map.hasLayer(clusterARG)) map.removeLayer(clusterARG);
+  if (map.hasLayer(clusterEXT)) map.removeLayer(clusterEXT);
+
+  // Crear clusters nuevos filtrando allPozos por yacimiento
+  const features = allPozos.features.filter(f => {
+    const p = f.properties || {};
+    return (p.yacimiento || "").toString().toUpperCase() === yacName.toUpperCase();
+  });
+
+  // Si no hay features, mostrar aviso y salir
+  if (features.length === 0) {
+    alert("No se encontraron pozos para ese yacimiento en los datos.");
+    return;
+  }
+
+  // Crear clusters temporales vacíos
+  const tmpYPF = L.markerClusterGroup({ iconCreateFunction: clusterIconCreate, disableClusteringAtZoom: 5 });
+  const tmpARG = L.markerClusterGroup({ iconCreateFunction: clusterIconCreate, disableClusteringAtZoom: 5 });
+  const tmpEXT = L.markerClusterGroup({ iconCreateFunction: clusterIconCreate, disableClusteringAtZoom: 5 });
+
+  // llenarlos con markers filtrados (miramos tipo_empresa)
+  features.forEach(f => {
+    const p = f.properties || {};
+    const coords = f.geometry && f.geometry.coordinates;
+    if (!coords) return;
+    const lng = coords[0], lat = coords[1];
+    const tipo_empresa = (p.tipo_empresa || p.empresa || "").toString().toUpperCase();
+    const color = p.color || colorFromType(tipo_empresa);
+    const pet = Number(p.petroleo_m3 || 0), gas = Number(p.gas_m3 || 0);
+    const radius = Math.max(3, Math.log1p(pet + gas) * 0.9);
+
+    const marker = L.circleMarker([lat, lng], {
+      radius: radius,
+      fillColor: color,
+      color: "#222",
+      weight: 0.5,
+      fillOpacity: 0.9,
+      tipo_empresa: tipo_empresa
+    });
+    marker.feature = f;
+    const popup = `
+      <b>Pozo:</b> ${p.pozo || p.idpozo || "Sin ID"}<br>
+      <b>Yacimiento:</b> ${p.yacimiento || "N/D"}<br>
+      <b>Empresa dueña:</b> ${p.empresa || p.empresa_operadora || "N/D"}<br>
+      <b>Operador:</b> ${p.operador || "N/D"}<br>
+      <b>Petroleo (2024-25):</b> ${pet.toLocaleString()} m³<br>
+      <b>Gas (2024-25):</b> ${gas.toLocaleString()} m³
+    `;
+    marker.bindPopup(popup);
+
+    if (tipo_empresa.includes("YPF")) tmpYPF.addLayer(marker);
+    else if (tipo_empresa.includes("ARG") || ["VISTA","CAPEX","PLUSPETROL","PETERSEN","PAMPA","PETROARGENTINA","PETROANDINA"].some(x => tipo_empresa.includes(x))) tmpARG.addLayer(marker);
+    else tmpEXT.addLayer(marker);
+  });
+
+  // Añadir clusters al mapa según filtros activos
+  if (showYPF) { tmpYPF.addTo(map); activePozosLayers.push(tmpYPF); }
+  if (showARG) { tmpARG.addTo(map); activePozosLayers.push(tmpARG); }
+  if (showEXT) { tmpEXT.addTo(map); activePozosLayers.push(tmpEXT); }
+
+  // Guardar referencias para poder removerlos luego
+  // limpiar clusters antiguos
+  // attach to global for removal by reset
+//   window._tmpClusters = [tmpYPF, tmpARG, tmpEXT];
+
+  // ajustar vista al bounds de los markers si existen
+  const groupAll = L.featureGroup();
+  features.forEach(f => {
+    const coords = f.geometry && f.geometry.coordinates;
+    if (coords) groupAll.addLayer(L.marker([coords[1], coords[0]]));
+  });
+  if (groupAll.getLayers().length) {
+    map.fitBounds(groupAll.getBounds().pad(0.3));
+  }
+}
+
+/* ----------------------------
+  Funciones de visibilidad: mostrar todos los yacimientos
+-----------------------------*/
+function showAllYacimientos() {
+  // remover clusters temporales si existían
+  if (window._tmpClusters && window._tmpClusters.length) {
+    window._tmpClusters.forEach(c => { try { map.removeLayer(c); } catch(e){} });
+    window._tmpClusters = [];
+  }
+  // quitar clusters permanentes si existían
+  if (map.hasLayer(clusterYPF)) map.removeLayer(clusterYPF);
+  if (map.hasLayer(clusterARG)) map.removeLayer(clusterARG);
+  if (map.hasLayer(clusterEXT)) map.removeLayer(clusterEXT);
+
+  // reanudar mostrar los yacimientos
+  updateYacimientosVisibility();
+  currentShownYacimiento = null;
+  // opcional: ajustar bounds al conjunto de yacimientos visibles
+  const boundsGroup = L.featureGroup();
+  [yacYPF, yacARG, yacEXT].forEach(g => {
+    g.eachLayer(l => boundsGroup.addLayer(l));
+  });
+  if (boundsGroup.getLayers().length) map.fitBounds(boundsGroup.getBounds().pad(0.3));
+}
+
+/* ----------------------------
+  Manejo de filtros (checkboxes)
+-----------------------------*/
+function updateYacimientosVisibility() {
+  // limpiar todos
+  try { yacYPF.remove(); } catch(e){}
+  try { yacARG.remove(); } catch(e){}
+  try { yacEXT.remove(); } catch(e){}
+  // añadir según flags
+  if (showYPF) yacYPF.addTo(map);
+  if (showARG) yacARG.addTo(map);
+  if (showEXT) yacEXT.addTo(map);
+}
+
+// cuando cambian checkboxes aplicamos cambios a yacimientos y a clusters temporales
+document.getElementById('chkYPF').addEventListener('change', (e) => {
+  showYPF = e.target.checked;
+  updateYacimientosVisibility();
+  // actualizar clusters mostrados
+  if (currentShownYacimiento) showPozosForYacimiento(currentShownYacimiento);
+});
+document.getElementById('chkARG').addEventListener('change', (e) => {
+  showARG = e.target.checked;
+  updateYacimientosVisibility();
+  if (currentShownYacimiento) showPozosForYacimiento(currentShownYacimiento);
+});
+document.getElementById('chkEXT').addEventListener('change', (e) => {
+  showEXT = e.target.checked;
+  updateYacimientosVisibility();
+  if (currentShownYacimiento) showPozosForYacimiento(currentShownYacimiento);
+});
+
+/* ----------------------------
+  (Opcional) superponer polígono Vaca Muerta
+   - Si tenés un archivo 'concesiones_neuquen.geojson', descomenta el fetch
+-----------------------------*/
+/*
+fetch('concesiones_neuquen.geojson').then(r=>r.json()).then(g=>{
+  L.geoJSON(g, { style: { color:'#444', weight:1.5, dashArray:'6 6', fill:false } }).addTo(map);
+});
+*/
+
+/* ----------------------------
+  FIN
+-----------------------------*/
+</script>
+</body>
+</html>
