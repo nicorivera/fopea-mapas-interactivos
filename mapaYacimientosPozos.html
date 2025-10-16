@@ -21,8 +21,8 @@
     #filtros { display: flex; flex-wrap: wrap; margin: auto; justify-content: center; align-items: center; }
     #chkYPF,#chkARG,#chkEXT{margin: 2px 4px 0; vertical-align: middle;}
     #tituMapa { font-size:14px; font-weight:400;letter-spacing: 1px;text-align: center; margin: 0 auto 5px; }
-    input[type="checkbox"] {-webkit-appearance: none;appearance: none;background-color: #fff;margin: 0;width: 15px;height: 15px;border: 1px solid #000;border-radius: 3px;transform: translateY(-0.075em);position: relative;}
-    input[type="checkbox"]::before {content: "";width: 9px;height: 9px;transition: 0.3s all ease;position: absolute;top: 2px;left: 2px;}
+    input[type="checkbox"] {-webkit-appearance: none;appearance: none;background-color: #fff;margin: 0;width: 16px;height: 16px;border: 1px solid #000;border-radius: 3px;transform: translateY(-0.075em);position: relative;}
+    input[type="checkbox"]::before {content: "";width: 11px;height: 11px;transition: 0.3s all ease;position: absolute;top: 2px;left: 2px;border-radius: 1px;}
     input[type="checkbox"]:checked::before {background-color: #000;}
     .leaflet-container a { color: #000; }
  </style>
@@ -51,41 +51,33 @@ function colorFromType(tipo) {
 // escala de radio para yacimientos (ya calculada en 'radio' por el python)
 // para clusters, usaremos reglas del usuario:
 function clusterSize(count) {
-  if (count < 30) return 30;
-  if (count < 500) return 50;
-  if (count < 1300) return 70;
-  if (count < 2300) return 95;
-  return 120;
+  if (count < 30) return 300;
+  if (count < 500) return 500;
+  if (count < 1300) return 700;
+  if (count < 2300) return 950;
+  return 1200;
 }
 
 // Mapa base de IGN
 const map = L.map("map").setView([-38, -68.5], 8);
-// L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-//     attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
-//     maxZoom: 16
-// }).addTo(map);
-// L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_terrain_lines/{z}/{x}/{y}{r}.png', {
-//     minZoom: 0,
-//     maxZoom: 16,
-//     attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    L.tileLayer('https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/mapabase_gris@EPSG%3A3857@png/{z}/{x}/{-y}.png', {
-        attribution: '<a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | <a href="http://www.ign.gob.ar/AreaServicios/Argenmap/IntroduccionV2" target="_blank">Instituto Geográfico Nacional</a> + <a href="http://www.osm.org/copyright" target="_blank">OpenStreetMap</a>',
-        minZoom: 3,
-        maxZoom: 18
-    }).addTo(map);
+  L.tileLayer('https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/mapabase_gris@EPSG%3A3857@png/{z}/{x}/{-y}.png', {
+    attribution: '<a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | <a href="http://www.ign.gob.ar/AreaServicios/Argenmap/IntroduccionV2" target="_blank">Instituto Geográfico Nacional</a> + <a href="http://www.osm.org/copyright" target="_blank">OpenStreetMap</a>',
+    minZoom: 3,
+    maxZoom: 18,
+    opacity: 0.7
+  }).addTo(map);
 
 // Capa area Vaca Muerta
 fetch("cuenca_neuquina_area_from_zip.geojson")
-    .then(r => r.json())
-    .then(data => {
-        const contornoLayer = L.geoJSON(data, {
-            style: { weight:0, fillColor:"#f3d2ff", stroke:"rgb(0,0,0)", strokeWidth:"2", fillOpacity:0.5 },
-            interactive: false
-            // style: { color:"#666", weight:1, fillColor:"#666", fillOpacity:0.08 }
-        }).bindPopup("<b>Área hidrocarburífera<br>Vaca Muerta</b>");
-        contornoLayer.addTo(map);
-    });
-
+  .then(r => r.json())
+  .then(data => {
+    const contornoLayer = L.geoJSON(data, {
+      style: { weight:1, fillColor:"#B9A78A", color:"rgba(0,0,0,0.3)", fillOpacity:0.3 },
+      interactive: false
+      // style: { color:"#666", weight:1, fillColor:"#666", fillOpacity:0.08 }
+    }).bindPopup("<b>Área hidrocarburífera<br>Vaca Muerta</b>");
+    contornoLayer.addTo(map);
+  });
 
 
 // Capas y estructuras
@@ -150,25 +142,6 @@ function clusterIconCreate(cluster) {
 }
 
 //  Cargar GeoJSONs
-// Promise.all([
-//   fetch('yacimientos_vm_EXT.geojson').then(r => r.json()),
-//   fetch('pozos_neuquina_vaca_muerta_2025.geojson').then(r => r.json())
-// ]).then(([yacJson, pozJson]) => {
-//   allYacimientos = yacJson;
-//   allPozos = pozJson;
-
-//   // Crear yacimientos: un círculo por yacimiento
-//   createYacimientosLayer(yacJson, allPozos);
-
-//   // Preparar pozos (no los mostramos todos al inicio; se mostrarán al hacer click o al deseleccionar filtros)
-//   // Cargamos los pozos en memoria y los asignamos a clusters pero no añadimos al mapa aún.
-//   preparePozosClusters(pozJson);
-
-//   // añadir las capas de yacimientos visibles según filtros
-//   updateYacimientosVisibility();
-// }).catch(err => {
-//   console.error("Error cargando GeoJSONs:", err);
-// });
 Promise.all([
   fetch('yacimientos_vm_EXT.geojson').then(r => r.json()),
   fetch('pozos_neuquina_vaca_muerta_2025.geojson').then(r => r.json())
@@ -262,7 +235,7 @@ function createYacimientosLayer(yacJson, allPozos) {
     // popup con info resumen
     const popupHtml = `
       <b>Yacimiento:</b> ${yacName}<br>
-      <b>Pozos:</b> ${props.num_pozos || "N/D"}<br>
+      <b>Pozos: ${props.num_pozos || "N/D"}</b> No convencionales<br>
       <b>Empresa dominante:</b> ${props.tipo_dominante || "N/D"}
       <br><i>(Click para ver pozos)</i>
     `;
@@ -325,12 +298,13 @@ function preparePozosClusters(pozJson) {
     const pozoId = p.pozo || p.idpozo || "Sin ID";
     const popup = `
       <b>Pozo:</b> ${pozoId}<br>
+      <b>Tipo:</b> No convencional<br>
       <b>Yacimiento:</b> ${p.yacimiento || "N/D"}<br>
       <b>Empresa dueña:</b> ${p.empresa || p.empresa_operadora || "N/D"}<br>
-      <b>Operador:</b> ${p.operador || "N/D"}<br>
       <b>Petroleo (2024-25):</b> ${pet.toLocaleString()} m³<br>
       <b>Gas (2024-25):</b> ${gas.toLocaleString()} m³
     `;
+    //   <b>Operador:</b> ${p.operador || "N/D"}<br>
     marker.bindPopup(popup);
 
     // Elegir cluster según tipo
@@ -404,6 +378,7 @@ function showPozosForYacimiento(yacName, pozos) {
     // Popup con detalle
     const popup = `
       <b>Pozo:</b> ${p.pozo || p.idpozo || "Sin ID"}<br>
+      <b>Tipo:</b> No convencional<br>
       <b>Yacimiento:</b> ${p.areayacimiento || "N/D"}<br>
       <b>Empresa:</b> ${p.empresa || p.empresa_operadora || "N/D"}<br>
       <b>Petróleo (2025):</b> ${pet.toLocaleString()} m³<br>
