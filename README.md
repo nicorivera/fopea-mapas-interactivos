@@ -11,5 +11,5 @@ Los archivos **geojson** fueron creados desde **generar_yacimientos_vm.py** corr
 > Para ver los mapas, mientras esten en desarrollo, levantar un servidor con `python3 -m http.server 8000`
 
 ### Vistas
-<img width="1451" height="670" alt="mapa" src="https://github.com/user-attachments/assets/612da5d6-cf5f-4123-81f6-8b7b56f19b88" />
-<img width="1450" height="670" alt="mapa2" src="https://github.com/user-attachments/assets/222b6434-6d3a-4979-8f59-d63cbf2f937d" />
+<img width="1428" height="740" alt="mapa3" src="https://github.com/user-attachments/assets/fe977a39-caa1-4ab2-ac6a-016e705d1801" />
+<img width="1428" height="739" alt="mapa4" src="https://github.com/user-attachments/assets/a4001ff8-8be5-4f73-8f41-9aec1b13230f" />
