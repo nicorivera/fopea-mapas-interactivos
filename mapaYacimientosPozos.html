@@ -60,24 +60,24 @@ function clusterSize(count) {
 
 // Mapa base de IGN
 const map = L.map("map").setView([-38, -68.5], 8);
-  L.tileLayer('https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/mapabase_gris@EPSG%3A3857@png/{z}/{x}/{-y}.png', {
-    attribution: '<a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | <a href="http://www.ign.gob.ar/AreaServicios/Argenmap/IntroduccionV2" target="_blank">Instituto Geográfico Nacional</a> + <a href="http://www.osm.org/copyright" target="_blank">OpenStreetMap</a>',
-    minZoom: 3,
-    maxZoom: 18,
-    opacity: 0.7
-  }).addTo(map);
+L.tileLayer('https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/mapabase_gris@EPSG%3A3857@png/{z}/{x}/{-y}.png', {
+        attribution: '<a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | <a href="http://www.ign.gob.ar/AreaServicios/Argenmap/IntroduccionV2" target="_blank">Instituto Geográfico Nacional</a> + <a href="http://www.osm.org/copyright" target="_blank">OpenStreetMap</a>',
+        minZoom: 3,
+        maxZoom: 18,
+        opacity: 0.5
+    }).addTo(map);
 
 // Capa area Vaca Muerta
 fetch("cuenca_neuquina_area_from_zip.geojson")
-  .then(r => r.json())
-  .then(data => {
-    const contornoLayer = L.geoJSON(data, {
-      style: { weight:1, fillColor:"#B9A78A", color:"rgba(0,0,0,0.3)", fillOpacity:0.3 },
-      interactive: false
-      // style: { color:"#666", weight:1, fillColor:"#666", fillOpacity:0.08 }
-    }).bindPopup("<b>Área hidrocarburífera<br>Vaca Muerta</b>");
-    contornoLayer.addTo(map);
-  });
+    .then(r => r.json())
+    .then(data => {
+        const contornoLayer = L.geoJSON(data, {
+            style: { weight:1, fillColor:"#B9A78A", color:"rgba(0,0,0,0.3)", fillOpacity:0.3 },
+            interactive: false
+            // style: { color:"#666", weight:1, fillColor:"#666", fillOpacity:0.08 }
+        }).bindPopup("<b>Área hidrocarburífera<br>Vaca Muerta</b>");
+        contornoLayer.addTo(map);
+    });
 
 
 // Capas y estructuras
@@ -184,7 +184,6 @@ Promise.all([
     if (currentShownYacimiento) showPozosForYacimiento(currentShownYacimiento);
   });
 
-  
   createYacimientosLayer(yacJson, allPozos);
   preparePozosClusters(pozJson);
   updateYacimientosVisibility();
@@ -218,7 +217,6 @@ function createYacimientosLayer(yacJson, allPozos) {
     //               f.properties.num_pozos < 2300 ? 40 : 50;
     // console.log(f.properties);
     
-
     // marker del yacimiento
     const circle = L.circleMarker([lat, lng], {
       radius: Math.max(2, radio/2), // ajustamos visualmente: radio en el geojson es grande
@@ -296,9 +294,11 @@ function preparePozosClusters(pozJson) {
 
     // Popup con detalle
     const pozoId = p.pozo || p.idpozo || "Sin ID";
+    const recurso = p.tipo_de_recurso || "Sin ID";
+    const pozoSigla = p.sigla || p.idpozo || "Sin ID";
     const popup = `
-      <b>Pozo:</b> ${pozoId}<br>
-      <b>Tipo:</b> No convencional<br>
+      <b>Pozo:</b> ${pozoSigla}<br>
+      <b>Tipo:</b> ${recurso}<br>
       <b>Yacimiento:</b> ${p.yacimiento || "N/D"}<br>
       <b>Empresa dueña:</b> ${p.empresa || p.empresa_operadora || "N/D"}<br>
       <b>Petroleo (2024-25):</b> ${pet.toLocaleString()} m³<br>
@@ -364,6 +364,8 @@ function showPozosForYacimiento(yacName, pozos) {
     const color = p.color || colorFromType(tipo_empresa);
     const pet = Number(p.prod_pet || 0), gas = Number(p.prod_gas || 0);
     const radius = Math.max(3, Math.log1p(pet + gas) * 0.9);
+    const recurso = p.tipo_de_recurso || "Sin ID";
+    const pozoSigla = p.sigla || p.idpozo || "Sin ID";
 
     const marker = L.circleMarker([lat, lng], {
       radius: radius,
@@ -377,12 +379,14 @@ function showPozosForYacimiento(yacName, pozos) {
 
     // Popup con detalle
     const popup = `
-      <b>Pozo:</b> ${p.pozo || p.idpozo || "Sin ID"}<br>
-      <b>Tipo:</b> No convencional<br>
+      <b>Pozo:</b> ${pozoSigla}<br>
+      <b>Tipo:</b> ${recurso}<br>
       <b>Yacimiento:</b> ${p.areayacimiento || "N/D"}<br>
       <b>Empresa:</b> ${p.empresa || p.empresa_operadora || "N/D"}<br>
-      <b>Petróleo (2025):</b> ${pet.toLocaleString()} m³<br>
-      <b>Gas (2025):</b> ${gas.toLocaleString()} m³
+      <hr>
+      <b>Producción 2025:</b><br>
+      <b>Petróleo:</b> ${pet.toLocaleString()} m³<br>
+      <b>Gas:</b> ${gas.toLocaleString()} m³
     `;
     //<b>Operador:</b> ${p.operador || "N/D"}<br>
     marker.bindPopup(popup);
@@ -397,11 +401,6 @@ function showPozosForYacimiento(yacName, pozos) {
   if (showYPF) { tmpYPF.addTo(map); activePozosLayers.push(tmpYPF); }
   if (showARG) { tmpARG.addTo(map); activePozosLayers.push(tmpARG); }
   if (showEXT) { tmpEXT.addTo(map); activePozosLayers.push(tmpEXT); }
-
-  // Guardar referencias para poder removerlos luego
-  // limpiar clusters antiguos
-  // attach to global for removal by reset
-//   window._tmpClusters = [tmpYPF, tmpARG, tmpEXT];
 
   // ajustar vista al bounds de los markers si existen
   const groupAll = L.featureGroup();
