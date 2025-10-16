@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <title>Vaca Muerta — Yacimientos y Pozos</title>
+  <title>DJV Bootcamp - FOPEA - Vaca Muerta - Yacimientos y Pozos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
@@ -11,7 +11,7 @@
     html,body,#map { height:100%; margin:0; padding:0; }
     /* .leaflet-right {position: absolute;left: 50%!important;transform: translateX(-50%)!important;top: 25px!important;} */
     .legend { width:100%;float: none!important; background:white; padding:8px; padding-bottom: 13px; border-radius:3px; box-shadow:none; font-size:13px; text-align: center;margin: 50px auto;position: absolute;left: 50%!important;transform: translateX(-50%)!important;top: -13px!important; }
-    .legend label { display:inline-block; vertical-align:middle; margin: 0 20px; font-weight:200;}
+    .legend label { display:inline-block; vertical-align:middle; margin: 0 20px; font-weight:200;text-transform: uppercase;letter-spacing: 0.5px;}
     .legend .sw { display:inline-block; width:14px; height:14px; margin-right:6px; border-radius:50%; vertical-align:middle; }
     /* .control-panel { position:absolute; top:10px; left:10px; z-index:1000; } */
     .btn { vertical-align: middle; transition: all 0.3s ease; background:#fff; width: fit-content; border: 0.5px solid #000; padding:5px 10px; border-radius:3px; margin-left:6px; display:inline-block; text-decoration:none; color:#000 !important; font-weight:600; }
@@ -24,6 +24,7 @@
     input[type="checkbox"] {-webkit-appearance: none;appearance: none;background-color: #fff;margin: 0;width: 15px;height: 15px;border: 1px solid #000;border-radius: 3px;transform: translateY(-0.075em);position: relative;}
     input[type="checkbox"]::before {content: "";width: 9px;height: 9px;transition: 0.3s all ease;position: absolute;top: 2px;left: 2px;}
     input[type="checkbox"]:checked::before {background-color: #000;}
+    .leaflet-container a { color: #000; }
  </style>
 </head>
 <body>
@@ -31,9 +32,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <script>
-
-// Configuración de colores/tamaños
-
+//  Configuración de colores/tamaños
 const COLOR_YPF = "#0178D6";
 const COLOR_ARG = "#9BBCDC";
 const COLOR_EXT = "#F4785E";
@@ -59,20 +58,23 @@ function clusterSize(count) {
   return 120;
 }
 
-
-// Mapa gris
+// Mapa base de IGN
 const map = L.map("map").setView([-38, -68.5], 8);
-L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
-    maxZoom: 16
-}).addTo(map);
-L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_terrain_lines/{z}/{x}/{y}{r}.png', {
-    minZoom: 0,
-    maxZoom: 16,
-    attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
+// L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+//     attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+//     maxZoom: 16
+// }).addTo(map);
+// L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_terrain_lines/{z}/{x}/{y}{r}.png', {
+//     minZoom: 0,
+//     maxZoom: 16,
+//     attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    L.tileLayer('https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/mapabase_gris@EPSG%3A3857@png/{z}/{x}/{-y}.png', {
+        attribution: '<a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | <a href="http://www.ign.gob.ar/AreaServicios/Argenmap/IntroduccionV2" target="_blank">Instituto Geográfico Nacional</a> + <a href="http://www.osm.org/copyright" target="_blank">OpenStreetMap</a>',
+        minZoom: 3,
+        maxZoom: 18
+    }).addTo(map);
 
-//  Capa de Vaca Muerta
+// Capa area Vaca Muerta
 fetch("cuenca_neuquina_area_from_zip.geojson")
     .then(r => r.json())
     .then(data => {
@@ -87,7 +89,6 @@ fetch("cuenca_neuquina_area_from_zip.geojson")
 
 
 // Capas y estructuras
-
 // Vamos a crear tres MarkerClusterGroups (uno por tipo de empresa) para los pozos,
 // y tres LayerGroups simples para los yacimientos.
 const clusterYPF = L.markerClusterGroup({
@@ -114,8 +115,7 @@ let showYPF = true, showARG = true, showEXT = true;
 let allYacimientos = null;
 let allPozos = null;
 
-// Función cluster iconCreate (color según mayoría en el cluster)
-
+//  Función cluster iconCreate (color según mayoría en el cluster)
 function clusterIconCreate(cluster) {
   const children = cluster.getAllChildMarkers();
   const count = cluster.getChildCount();
@@ -149,8 +149,26 @@ function clusterIconCreate(cluster) {
   return L.divIcon({ html: html, className: 'cluster-icon', iconSize: [size, size]});
 }
 
-// Cargar GeoJSONs
+//  Cargar GeoJSONs
+// Promise.all([
+//   fetch('yacimientos_vm_EXT.geojson').then(r => r.json()),
+//   fetch('pozos_neuquina_vaca_muerta_2025.geojson').then(r => r.json())
+// ]).then(([yacJson, pozJson]) => {
+//   allYacimientos = yacJson;
+//   allPozos = pozJson;
 
+//   // Crear yacimientos: un círculo por yacimiento
+//   createYacimientosLayer(yacJson, allPozos);
+
+//   // Preparar pozos (no los mostramos todos al inicio; se mostrarán al hacer click o al deseleccionar filtros)
+//   // Cargamos los pozos en memoria y los asignamos a clusters pero no añadimos al mapa aún.
+//   preparePozosClusters(pozJson);
+
+//   // añadir las capas de yacimientos visibles según filtros
+//   updateYacimientosVisibility();
+// }).catch(err => {
+//   console.error("Error cargando GeoJSONs:", err);
+// });
 Promise.all([
   fetch('yacimientos_vm_EXT.geojson').then(r => r.json()),
   fetch('pozos_neuquina_vaca_muerta_2025.geojson').then(r => r.json())
@@ -158,7 +176,7 @@ Promise.all([
   allYacimientos = yacJson;
   allPozos = pozJson;
 
-  // --- Contadores de yacimientos por tipo ---
+  // Contadores de yacimientos por tipo 
   let countYPF = 0, countARG = 0, countEXT = 0;
   yacJson.features.forEach(f => {
     const tipo = (f.properties?.tipo_dominante || "").toUpperCase();
@@ -167,16 +185,16 @@ Promise.all([
     else countEXT++;
   });
 
-  // --- Mostrar los conteos en los labels ---
+  //  Mostrar los conteos en los labels
   const lblYPF = document.querySelector('label[for="chkYPF"]') || document.querySelector('input#chkYPF')?.parentElement;
   const lblARG = document.querySelector('label[for="chkARG"]') || document.querySelector('input#chkARG')?.parentElement;
   const lblEXT = document.querySelector('label[for="chkEXT"]') || document.querySelector('input#chkEXT')?.parentElement;
 
   if (lblYPF) lblYPF.innerHTML = `<input id="chkYPF" type="checkbox" checked/> <span class="sw" style="background:${COLOR_YPF}"></span>YPF <b>(${countYPF})</b>`;
-  if (lblARG) lblARG.innerHTML = `<input id="chkARG" type="checkbox" checked/> <span class="sw" style="background:${COLOR_ARG}"></span>Empresas argentinas <b>(${countARG})</b>`;
-  if (lblEXT) lblEXT.innerHTML = `<input id="chkEXT" type="checkbox" checked/> <span class="sw" style="background:${COLOR_EXT}"></span>Empresas extranjeras <b>(${countEXT})</b>`;
+  if (lblARG) lblARG.innerHTML = `<input id="chkARG" type="checkbox" checked/> <span class="sw" style="background:${COLOR_ARG}"></span>ARGENTINAS <b>(${countARG})</b>`;
+  if (lblEXT) lblEXT.innerHTML = `<input id="chkEXT" type="checkbox" checked/> <span class="sw" style="background:${COLOR_EXT}"></span>EXTRANJERAS <b>(${countEXT})</b>`;
 
-  // --- Volver a enlazar los eventos de cambio después de reemplazar el HTML ---
+  // Volver a enlazar los eventos de cambio después de reemplazar el HTML 
   document.getElementById('chkYPF').addEventListener('change', (e) => {
     showYPF = e.target.checked;
     updateYacimientosVisibility();
@@ -193,7 +211,7 @@ Promise.all([
     if (currentShownYacimiento) showPozosForYacimiento(currentShownYacimiento);
   });
 
-  // --- Resto del flujo original ---
+  
   createYacimientosLayer(yacJson, allPozos);
   preparePozosClusters(pozJson);
   updateYacimientosVisibility();
@@ -202,8 +220,7 @@ Promise.all([
 });
 
 
-// Crear yacimientos (vista inicial)
-
+//  Crear yacimientos (vista inicial)
 function createYacimientosLayer(yacJson, allPozos) {
   // evitar duplicados por nombre
   const seen = new Set();
@@ -246,33 +263,32 @@ function createYacimientosLayer(yacJson, allPozos) {
     const popupHtml = `
       <b>Yacimiento:</b> ${yacName}<br>
       <b>Pozos:</b> ${props.num_pozos || "N/D"}<br>
-      <b>Tipo dominante:</b> ${props.tipo_dominante || "N/D"}
+      <b>Empresa dominante:</b> ${props.tipo_dominante || "N/D"}
       <br><i>(Click para ver pozos)</i>
     `;
     circle.bindPopup(popupHtml);
 
-    // al click mostrar pozos y hacer zoom
+    // Al click mostrar pozos y hacer zoom
     circle.on('click', (e) => {
-      // zoom hacia el punto (o hacia un pequeño bbox)
+      // Zoom hacia el punto (o hacia un pequeño bbox)
       map.setView([lat, lng], 12);
       showPozosForYacimiento(yacName, allPozos);
     });
 
-    // Añadir al grupo correspondiente según tipo dominante
+    // Agregar al grupo correspondiente según tipo dominante
     const tipo_up = (props.tipo_dominante || "").toString().toUpperCase();
     if (tipo_up.includes("YPF")) yacYPF.addLayer(circle);
     else if (tipo_up.includes("ARG")) yacARG.addLayer(circle);
     else yacEXT.addLayer(circle);
   });
 
-  // agregar todos los grupos al mapa (visibilidad controlada por filtros)
+  // Agregar todos los grupos al mapa (visibilidad controlada por filtros)
   yacYPF.addTo(map);
   yacARG.addTo(map);
   yacEXT.addTo(map);
 }
 
-// Preparar pozos en clusters (en memoria)
-
+//  Preparar pozos en clusters (en memoria)
 function preparePozosClusters(pozJson) {
   // iterar features y crear markers dentro del cluster correspondiente
   pozJson.features.forEach(f => {
@@ -287,7 +303,7 @@ function preparePozosClusters(pozJson) {
     const gas = Number(p.gas_m3 || 0);
     const totalProd = pet + gas;
 
-    // tamaño de pozo individual según producción (ajustar si se desea)
+    // Tamaño de pozo individual según producción (ajustar si se desea)
     const radius = Math.max(3, Math.log1p(totalProd) * 0.3);
 
     const marker = L.circleMarker([lat, lng], {
@@ -301,11 +317,11 @@ function preparePozosClusters(pozJson) {
       tipo_empresa: tipo_empresa  // mantenerlo en options para clusterIconCreate
     });
 
-    // attach feature for cluster counting
+    // Agregar feature para conteo en clusters
     marker.feature = f;
     marker.options.tipo_empresa = tipo_empresa;
 
-    // popup detalle
+    // Popup con detalle
     const pozoId = p.pozo || p.idpozo || "Sin ID";
     const popup = `
       <b>Pozo:</b> ${pozoId}<br>
@@ -317,7 +333,7 @@ function preparePozosClusters(pozJson) {
     `;
     marker.bindPopup(popup);
 
-    // elegir cluster según tipo
+    // Elegir cluster según tipo
     const t = tipo_empresa.toUpperCase();
     if (t.includes("YPF")) clusterYPF.addLayer(marker);
     // else if (t.includes("ARG") || ["VISTA","CAPEX","PLUSPETROL","PETERSEN","PAMPA","PETROARGENTINA","PETROANDINA"].some(x => t.includes(x))) clusterARG.addLayer(marker);
@@ -329,7 +345,6 @@ function preparePozosClusters(pozJson) {
 }
 
 //  Mostrar pozos de un yacimiento al click
-
 let currentShownYacimiento = null;
 let activePozosLayers = []; // guardamos los clusters activos en el mapa
 
@@ -348,7 +363,7 @@ function showPozosForYacimiento(yacName, pozos) {
   if (map.hasLayer(clusterARG)) map.removeLayer(clusterARG);
   if (map.hasLayer(clusterEXT)) map.removeLayer(clusterEXT);
 
-  // Crear clusters nuevos filtrando allPozos por yacimiento
+  // Crear clusters nuevos filtrando pozos por yacimiento
   const features = pozos.features.filter(f => {
     const p = f.properties || {};
     return (p.areayacimiento || "").toString().toUpperCase() === yacName.toUpperCase();
@@ -365,7 +380,7 @@ function showPozosForYacimiento(yacName, pozos) {
   const tmpARG = L.markerClusterGroup({ iconCreateFunction: clusterIconCreate, disableClusteringAtZoom: 5 });
   const tmpEXT = L.markerClusterGroup({ iconCreateFunction: clusterIconCreate, disableClusteringAtZoom: 5 });
 
-  // llenarlos con markers filtrados (miramos tipo_empresa)
+  // Llenarlos con markers filtrados (miramos tipo_empresa)
   features.forEach(f => {
     const p = f.properties || {};
     const coords = f.geometry && f.geometry.coordinates;
@@ -385,6 +400,8 @@ function showPozosForYacimiento(yacName, pozos) {
       tipo_empresa: tipo_empresa
     });
     marker.feature = f;
+
+    // Popup con detalle
     const popup = `
       <b>Pozo:</b> ${p.pozo || p.idpozo || "Sin ID"}<br>
       <b>Yacimiento:</b> ${p.areayacimiento || "N/D"}<br>
@@ -423,7 +440,6 @@ function showPozosForYacimiento(yacName, pozos) {
 }
 
 //  Funciones de visibilidad: mostrar todos los yacimientos
-
 function showAllYacimientos() {
     // Si ya hay pozos mostrados, removerlos del mapa antes de cargar nuevos
   if (activePozosLayers.length > 0) {
@@ -454,7 +470,6 @@ function showAllYacimientos() {
 }
 
 //  Manejo de filtros (checkboxes)
-
 function updateYacimientosVisibility() {
   // limpiar todos
   try { yacYPF.remove(); } catch(e){}
@@ -466,18 +481,17 @@ function updateYacimientosVisibility() {
   if (showEXT) yacEXT.addTo(map);
 }
 
-//  Controles Filtros
-
+//  Controles filtros
 const controlDiv = L.control({position: 'topright'});
 controlDiv.onAdd = function () {
   const d = L.DomUtil.create('div','legend');
   d.innerHTML = `<div>
     <h3 id="tituMapa">YACIMIENTO PETROLÍFERO VACA MUERTA</h3>
     <div id="filtros">
-        <p style="font-weight:bold; margin:0px 6px;display:inline-block;">Filtro por empresa</p>
+        <p style="font-weight:bold; margin:0px 6px;display:inline-block;">Filtro por empresas</p>
         <label><input id="chkYPF" type="checkbox" checked/> <span class="sw" style="background:${COLOR_YPF}"></span>YPF</label>
-        <label><input id="chkARG" type="checkbox" checked/> <span class="sw" style="background:${COLOR_ARG}"></span>Empresas argentinas</label>
-        <label><input id="chkEXT" type="checkbox" checked/> <span class="sw" style="background:${COLOR_EXT}"></span>Empresas extranjeras</label>
+        <label><input id="chkARG" type="checkbox" checked/> <span class="sw" style="background:${COLOR_ARG}"></span>ARGENTINAS</label>
+        <label><input id="chkEXT" type="checkbox" checked/> <span class="sw" style="background:${COLOR_EXT}"></span>EXTRANJERAS</label>
         <a id="btnReset" class="btn" href="#">Ver todos los yacimientos</a>
     </div>
     </div>`;
@@ -487,7 +501,7 @@ controlDiv.addTo(map);
 
 document.getElementById('btnReset').addEventListener('click', (e) => {
   e.preventDefault();
-  // remove any filtered pozos and show all yacimientos
+  // Borrar cualquier pozo filtrado y mostrar todos los yacimientos
   showAllYacimientos();
 });
 
