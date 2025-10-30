@@ -9,23 +9,32 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
   <style>
     html,body,#map { height:100%; margin:0; padding:0; }
-    /* .leaflet-right {position: absolute;left: 50%!important;transform: translateX(-50%)!important;top: 25px!important;} */
-    .legend { width:100%;float: none!important; background:white; padding:8px; padding-bottom: 13px; border-radius:3px; box-shadow:none; font-size:13px; text-align: center;margin: 50px auto;position: absolute;left: 50%!important;transform: translateX(-50%)!important;top: -13px!important; }
+    .legend { width:100%;height:60px;float: none!important; background:white; padding:8px; padding-bottom: 13px; border-radius:3px; box-shadow:none; font-size:13px; text-align: center;margin: 50px auto;position: absolute;left: 50%!important;transform: translateX(-50%)!important;top: -13px!important; }
     .legend label { display:inline-block; vertical-align:middle; margin: 0 20px; font-weight:200;text-transform: uppercase;letter-spacing: 0.5px;}
-    .legend .sw { display:inline-block; width:14px; height:14px; margin-right:6px; border-radius:50%; vertical-align:middle; }
-    /* .control-panel { position:absolute; top:10px; left:10px; z-index:1000; } */
-    .btn { vertical-align: middle; transition: all 0.3s ease; background:#fff; width: fit-content; border: 0.5px solid #000; padding:5px 10px; border-radius:3px; margin-left:6px; display:inline-block; text-decoration:none; color:#000 !important; font-weight:600; }
-    .btn:hover { background:#000; color:#fff !important; }
+    .legend .sw { display:inline-block; width:14px; height:14px; margin-right:6px; margin-left: -5px; border-radius:50%; vertical-align:middle; }
+    .btn { cursor: pointer; vertical-align: middle; transition: all 0.3s ease; background-color:#fff; width: fit-content; border: 0.5px solid #000; padding:5px 10px; border-radius:3px; margin-left:6px; display:inline-block; text-decoration:none; }
+    .btn:hover { background-color:#000; color:#fff; }
     .leaflet-top.leaflet-right{width: 100%;margin: auto;}
     .leaflet-top.leaflet-left{z-index: 1001; top: -10px;}
-    #filtros { display: flex; flex-wrap: wrap; margin: auto; justify-content: center; align-items: center; }
-    #chkYPF,#chkARG,#chkEXT{margin: 2px 4px 0; vertical-align: middle;}
-    #tituMapa { font-size:14px; font-weight:400;letter-spacing: 1px;text-align: center; margin: 0 auto 5px; }
-    input[type="checkbox"] {-webkit-appearance: none;appearance: none;background-color: #fff;margin: 0;width: 16px;height: 16px;border: 1px solid #000;border-radius: 3px;transform: translateY(-0.075em);position: relative;}
-    input[type="checkbox"]::before {content: "";width: 11px;height: 11px;transition: 0.3s all ease;position: absolute;top: 2px;left: 2px;border-radius: 1px;}
-    input[type="checkbox"]:checked::before {background-color: #000;}
+    #filtros { display: flex; flex-wrap: wrap; margin: 15px auto; justify-content: center; align-items: center; }
+    #btnReset { font-weight:bold; }
+    #chkYPF,#chkARG,#chkEXT{background-color: #fff; vertical-align: middle;}
+    #chkYPF::before, #chkYPF:hover{background-color: #0178D6 !important;}
+    #chkARG::before, #chkARG:hover{background-color: #9BBCDC !important;}
+    #chkEXT::before, #chkEXT:hover{background-color: #F4785E !important;}
+    input[type="checkbox"] {-webkit-appearance: none;appearance: none;background-color: transparent;margin: 0;width: 2px;height: 16px;transform: translateY(-0.075em);position: relative;}
+    input[type="checkbox"]::before {content: "";width: 1px;height: 11px;transition: 0.3s all ease;position: absolute;top: 2px;left: 1px;}
+    input[type="checkbox"]:checked::before {background-color: transparent;}
     .leaflet-container a { color: #000; }
- </style>
+    .bot { cursor: pointer;vertical-align: middle; transition: all 0.3s ease; background:#fff; width: fit-content; border: 0.5px solid #000; padding:5px 10px; border-radius:3px; margin-left:6px; display:inline-block; text-decoration:none; color:#000; font-weight:600; }
+    .filtro-btn { position: relative; border:1px solid #000; cursor: pointer; border-radius:4px; padding:5px 10px 5px 20px; margin:0px 10px; transition: all 0.2s ease; }
+    .filtro-btn::before {content: "";width: 10px;height: 10px;border-radius: 50%; transition: 0.3s all ease;position: absolute;top: 7px;left: 7px;}
+    .btn.filtro-btn.no { background-color:#fff !important; }
+    .filtro-btn.active { color:#fff; }
+    .filtro-btn:hover { background-color:#000; color:#fff; }
+    .leaflet-interactive:focus { outline-color: transparent; outline-style: none;}
+    .leaflet-interactive.no { opacity:0;}
+  </style>
 </head>
 <body>
 <div id="map"></div>
@@ -43,8 +52,7 @@ function colorFromType(tipo) {
   tipo = tipo.toUpperCase();
   
   if (tipo.includes("YPF")) return COLOR_YPF;
-  if (["TOTAL", "CHEVRON", "FLXS"].some(x => tipo.includes(x))) return COLOR_EXT;
-//   if (["ARGENTINA","ARG"].some(x => tipo.includes(x))) return COLOR_ARG;
+  if (["TOTAL", "CHEVRON", "FLXS", "SHELL", "KILWER"].some(x => tipo.includes(x))) return COLOR_EXT;
   return COLOR_ARG;
 }
 
@@ -58,27 +66,86 @@ function clusterSize(count) {
   return 1200;
 }
 
-// Mapa base de IGN
+L.TileLayer.Grayscale = L.TileLayer.extend({
+	options: {
+		quotaRed: 21,
+		quotaGreen: 71,
+		quotaBlue: 8,
+		quotaDividerTune: 0,
+		quotaDivider: function() {
+			return this.quotaRed + this.quotaGreen + this.quotaBlue + this.quotaDividerTune;
+		}
+	},
+
+	initialize: function (url, options) {
+		options = options || {}
+		options.crossOrigin = true;
+		L.TileLayer.prototype.initialize.call(this, url, options);
+
+		this.on('tileload', function(e) {
+			this._makeGrayscale(e.tile);
+		});
+	},
+
+	_createTile: function () {
+		var tile = L.TileLayer.prototype._createTile.call(this);
+		tile.crossOrigin = "Anonymous";
+		return tile;
+	},
+
+	_makeGrayscale: function (img) {
+		if (img.getAttribute('data-grayscaled'))
+			return;
+
+      img.crossOrigin = '';
+		var canvas = document.createElement("canvas");
+		canvas.width = img.width;
+		canvas.height = img.height;
+		var ctx = canvas.getContext("2d");
+		ctx.drawImage(img, 0, 0);
+
+		var imgd = ctx.getImageData(0, 0, canvas.width, canvas.height);
+		var pix = imgd.data;
+		for (var i = 0, n = pix.length; i < n; i += 4) {
+      pix[i] = pix[i + 1] = pix[i + 2] = (this.options.quotaRed * pix[i] + this.options.quotaGreen * pix[i + 1] + this.options.quotaBlue * pix[i + 2]) / this.options.quotaDivider();
+		}
+		ctx.putImageData(imgd, 0, 0);
+		img.setAttribute('data-grayscaled', true);
+		img.src = canvas.toDataURL();
+	}
+});
+
+L.tileLayer.grayscale = function (url, options) {
+	return new L.TileLayer.Grayscale(url, options);
+};
+
+// Mapa base de INTITUTO GEOGRÁFICO NACIONAL
 const map = L.map("map").setView([-38, -68.5], 8);
-L.tileLayer('https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/mapabase_gris@EPSG%3A3857@png/{z}/{x}/{-y}.png', {
-        attribution: '<a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | <a href="http://www.ign.gob.ar/AreaServicios/Argenmap/IntroduccionV2" target="_blank">Instituto Geográfico Nacional</a> + <a href="http://www.osm.org/copyright" target="_blank">OpenStreetMap</a>',
-        minZoom: 3,
-        maxZoom: 18,
-        opacity: 0.5
-    }).addTo(map);
+  L.tileLayer('https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/mapabase_gris@EPSG%3A3857@png/{z}/{x}/{-y}.png', {
+    attribution: '<a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | <a href="http://www.ign.gob.ar/AreaServicios/Argenmap/IntroduccionV2" target="_blank">Instituto Geográfico Nacional</a> + <a href="http://www.osm.org/copyright" target="_blank">OpenStreetMap</a>',
+    minZoom: 3,
+    maxZoom: 18,
+    opacity: 0.5
+  }).addTo(map);
+  // L.tileLayer.grayscale('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  //   attribution: 'Map data &copy; <a href="https://openstreetmap.org/">OpenStreetMap</a> contributors',
+  //   maxZoom: 18, minZoom: 3
+  // }).addTo(map);
 
 // Capa area Vaca Muerta
 fetch("cuenca_neuquina_area_from_zip.geojson")
-    .then(r => r.json())
-    .then(data => {
-        const contornoLayer = L.geoJSON(data, {
-            style: { weight:1, fillColor:"#B9A78A", color:"rgba(0,0,0,0.3)", fillOpacity:0.3 },
-            interactive: false
-            // style: { color:"#666", weight:1, fillColor:"#666", fillOpacity:0.08 }
-        }).bindPopup("<b>Área hidrocarburífera<br>Vaca Muerta</b>");
-        contornoLayer.addTo(map);
-    });
+  .then(r => r.json())
+  .then(data => {
+    const contornoLayer = L.geoJSON(data, {
+      style: { weight:1, fillColor:"#B9A78A", color:"rgba(0,0,0,0.3)", fillOpacity:0.3 },
+      interactive: false
+    }).bindPopup("<b>Área hidrocarburífera<br>Vaca Muerta</b>");
+    contornoLayer.addTo(map);
+  });
 
+window.activeShape = null;
+window.activePozosLayers = [];
+window.currentShownYacimiento = null;
 
 // Capas y estructuras
 // Vamos a crear tres MarkerClusterGroups (uno por tipo de empresa) para los pozos,
@@ -116,9 +183,8 @@ function clusterIconCreate(cluster) {
   children.forEach(m => {
     const tipo = (m.options.tipo_empresa || (m.feature && m.feature.properties.tipo_empresa) || "").toString().toUpperCase();
     if (tipo.includes("YPF")) ypf++;
-    // else if (["VISTA","CAPEX","PLUSPETROL","PETERSEN","PAMPA","PETROARGENTINA","PETROANDINA"].some(x => tipo.includes(x) || tipo.includes("ARG"))) arg++;
-    else if (["TOTAL", "CHEVRON", "FLXS"].some(x => tipo.includes(x))) ext++;
-    else arg++;
+    else if (["TOTAL", "CHEVRON", "FLXS", "SHELL", "KILWER"].some(x => t.includes(x))) ext++;
+    else if (["VISTA","CAPEX","PLUSPETROL","PETROLERA","PAMPA","PETROARGENTINA","PETROQUIMICA","PATAGONIA","TECPETROL","OILSTONE ENERGIA"].some(x => t.includes(x))) arg++;
   });
   let color = COLOR_EXT;
   if (ypf >= arg && ypf >= ext) color = COLOR_YPF;
@@ -143,11 +209,13 @@ function clusterIconCreate(cluster) {
 
 //  Cargar GeoJSONs
 Promise.all([
-  fetch('yacimientos_vm_EXT.geojson').then(r => r.json()),
-  fetch('pozos_neuquina_vaca_muerta_2025.geojson').then(r => r.json())
-]).then(([yacJson, pozJson]) => {
+  fetch('yacimientos_vm_EXTARGYPF.geojson').then(r => r.json()),
+  fetch('pozos_vm_EXTARGYPF.geojson').then(r => r.json()),
+  fetch('yacimientos_vm_shapes.geojson').then(r => r.json()),
+]).then(([yacJson, pozJson, shapesJson]) => {
   allYacimientos = yacJson;
   allPozos = pozJson;
+  allShapes = shapesJson;
 
   // Contadores de yacimientos por tipo 
   let countYPF = 0, countARG = 0, countEXT = 0;
@@ -159,41 +227,84 @@ Promise.all([
   });
 
   //  Mostrar los conteos en los labels
-  const lblYPF = document.querySelector('label[for="chkYPF"]') || document.querySelector('input#chkYPF')?.parentElement;
-  const lblARG = document.querySelector('label[for="chkARG"]') || document.querySelector('input#chkARG')?.parentElement;
-  const lblEXT = document.querySelector('label[for="chkEXT"]') || document.querySelector('input#chkEXT')?.parentElement;
+  const chkYPF = document.getElementById('chkYPF');
+  const chkARG = document.getElementById('chkARG');
+  const chkEXT = document.getElementById('chkEXT');
+  chkYPF.innerHTML= `YPF (${countYPF})`;
+  chkARG.innerHTML= `OTRAS ARGENTINAS (${countARG})`;
+  chkEXT.innerHTML= `EXTRANJERAS (${countEXT})`;
 
-  if (lblYPF) lblYPF.innerHTML = `<input id="chkYPF" type="checkbox" checked/> <span class="sw" style="background:${COLOR_YPF}"></span>YPF <b>(${countYPF})</b>`;
-  if (lblARG) lblARG.innerHTML = `<input id="chkARG" type="checkbox" checked/> <span class="sw" style="background:${COLOR_ARG}"></span>ARGENTINAS <b>(${countARG})</b>`;
-  if (lblEXT) lblEXT.innerHTML = `<input id="chkEXT" type="checkbox" checked/> <span class="sw" style="background:${COLOR_EXT}"></span>EXTRANJERAS <b>(${countEXT})</b>`;
+  /* === LÓGICA DE FILTROS EXCLUSIVOS === */
+  function activarFiltro(tipo) {
+    // quitar pozos visibles
+    if (activePozosLayers.length > 0) {
+      activePozosLayers.forEach(c => map.removeLayer(c));
+      activePozosLayers = [];
+    }
+    // Eliminar el shape anterior si existe
+    console.log('Filtros',window.activeShape);
+    map.setView([-38, -68.5], 8);
+    // reset botones
+    document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('no'));
 
-  // Volver a enlazar los eventos de cambio después de reemplazar el HTML 
-  document.getElementById('chkYPF').addEventListener('change', (e) => {
-    showYPF = e.target.checked;
+    // activar botón clickeado
+    const btn = document.querySelector(`[data-tipo="${tipo}"]`);
+    const btns = document.querySelectorAll('.btn.filtro-btn');
+    if (btn) {btn.classList.add('active'); btn.style.backgroundColor = tipo === 'YPF' ? COLOR_YPF : tipo === 'ARG' ? COLOR_ARG : COLOR_EXT;}
+    btns.forEach(b => {
+      if (!b.classList.contains('active')) {b.style.backgroundColor = '#fff';}
+    });
+
+    // actualizar visibilidad de yacimientos según tipo elegido
+    showYPF = (tipo === 'YPF');
+    showARG = (tipo === 'ARG');
+    showEXT = (tipo === 'EXT');
     updateYacimientosVisibility();
-    if (currentShownYacimiento) showPozosForYacimiento(currentShownYacimiento);
-  });
-  document.getElementById('chkARG').addEventListener('change', (e) => {
-    showARG = e.target.checked;
+
+    // si hay un yacimiento abierto, actualizar sus pozos
+    // if (currentShownYacimiento) showPozosForYacimiento(currentShownYacimiento, allPozos, allShapes);
+    if (window.activeShape) {
+      try { map.removeLayer(window.activeShape);} catch (e) {}
+      window.activeShape = null;
+    }
+  }
+
+  // manejar clicks en botones
+  document.getElementById('chkYPF').addEventListener('click', () => activarFiltro('YPF'));
+  document.getElementById('chkARG').addEventListener('click', () => activarFiltro('ARG'));
+  document.getElementById('chkEXT').addEventListener('click', () => activarFiltro('EXT'));
+
+  // botón de reset Ver todos los yacimientos
+  document.getElementById('btnReset').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.querySelectorAll('.btn.filtro-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.btn.filtro-btn').forEach(b => b.classList.add('no'));
+    let activePozos = document.querySelectorAll('.leaflet-interactive');
+    activePozos.forEach(p => { 
+      if (p.classList.contains('no')) {p.classList.remove('no');}
+    });
+    map.setView([-38, -68.5], 7);
+    // Eliminar el shape anterior si existe
+    if (window.activeShape) {
+      try { map.removeLayer(window.activeShape);} catch (e) {}
+      window.activeShape = null;
+    }
+    
+    showYPF = true; showARG = true; showEXT = true;
     updateYacimientosVisibility();
-    if (currentShownYacimiento) showPozosForYacimiento(currentShownYacimiento);
-  });
-  document.getElementById('chkEXT').addEventListener('change', (e) => {
-    showEXT = e.target.checked;
-    updateYacimientosVisibility();
-    if (currentShownYacimiento) showPozosForYacimiento(currentShownYacimiento);
+    showAllYacimientos();
   });
 
-  createYacimientosLayer(yacJson, allPozos);
-  preparePozosClusters(pozJson);
+  createYacimientosLayer(yacJson, allPozos, allShapes);
+  preparePozosClusters(allPozos);
   updateYacimientosVisibility();
 }).catch(err => {
   console.error("Error cargando GeoJSONs:", err);
 });
 
-
 //  Crear yacimientos (vista inicial)
-function createYacimientosLayer(yacJson, allPozos) {
+function createYacimientosLayer(yacJson, allPozos, allShapes) {
   // evitar duplicados por nombre
   const seen = new Set();
   
@@ -207,7 +318,6 @@ function createYacimientosLayer(yacJson, allPozos) {
     const coords = f.geometry && f.geometry.coordinates;
     if (!coords) return;
     const lng = coords[0], lat = coords[1];
-
     const tipo = (props.tipo_dominante || "").toString();
     const color = props.color || colorFromType(tipo);
     const radio = props.radio ? Number(props.radio) : 40;
@@ -215,37 +325,34 @@ function createYacimientosLayer(yacJson, allPozos) {
     //               f.properties.num_pozos < 500 ? 20 :
     //               f.properties.num_pozos < 1300 ? 30 :
     //               f.properties.num_pozos < 2300 ? 40 : 50;
-    // console.log(f.properties);
     
     // marker del yacimiento
     const circle = L.circleMarker([lat, lng], {
       radius: Math.max(2, radio/2), // ajustamos visualmente: radio en el geojson es grande
-    //   radius: radio, // ajustamos visualmente: radio en el geojson es grande
       fillColor: color,
       color: "#e5e5e5",
-    //   stroke: "#e5e5e5",
       strokeWidth: 0.2,
       weight: 0.8,
       fillOpacity: 0.7,
-    //   stroke: rgb(255, 255, 255),
     });
 
     // popup con info resumen
     const popupHtml = `
       <b>Yacimiento:</b> ${yacName}<br>
-      <b>Pozos: ${props.num_pozos || "N/D"}</b> No convencionales<br>
+      <b>Pozos: ${props.num_pozos || "N/D"}</b><br>
       <b>Empresa dominante:</b> ${props.tipo_dominante || "N/D"}
-      <br><i>(Click para ver pozos)</i>
     `;
+    circle.bindTooltip(`<b>Yacimiento ${yacName}</b><br>${props.num_pozos} pozos`);
+    
     circle.bindPopup(popupHtml);
-
+    
     // Al click mostrar pozos y hacer zoom
     circle.on('click', (e) => {
       // Zoom hacia el punto (o hacia un pequeño bbox)
-      map.setView([lat, lng], 12);
-      showPozosForYacimiento(yacName, allPozos);
+      map.setView([lat, lng], 10);      
+      showPozosForYacimiento(yacName, allPozos, allShapes, circle);
     });
-
+    
     // Agregar al grupo correspondiente según tipo dominante
     const tipo_up = (props.tipo_dominante || "").toString().toUpperCase();
     if (tipo_up.includes("YPF")) yacYPF.addLayer(circle);
@@ -254,24 +361,23 @@ function createYacimientosLayer(yacJson, allPozos) {
   });
 
   // Agregar todos los grupos al mapa (visibilidad controlada por filtros)
-  yacYPF.addTo(map);
-  yacARG.addTo(map);
   yacEXT.addTo(map);
+  yacARG.addTo(map);
+  yacYPF.addTo(map);
 }
 
 //  Preparar pozos en clusters (en memoria)
 function preparePozosClusters(pozJson) {
   // iterar features y crear markers dentro del cluster correspondiente
   pozJson.features.forEach(f => {
-    const p = f.properties || {};
+    const p = f.properties || {};    
     const coords = f.geometry && f.geometry.coordinates;
     if (!coords) return;
     const lng = coords[0], lat = coords[1];
     const tipo_empresa = (p.tipo_empresa || p.empresa || "").toString();
     const color = p.color || colorFromType(tipo_empresa);
-
-    const pet = Number(p.petroleo_m3 || 0);
-    const gas = Number(p.gas_m3 || 0);
+    const pet = Number(p.prod_pet || 0);
+    const gas = Number(p.prod_gas || 0);
     const totalProd = pet + gas;
 
     // Tamaño de pozo individual según producción (ajustar si se desea)
@@ -280,7 +386,6 @@ function preparePozosClusters(pozJson) {
     const marker = L.circleMarker([lat, lng], {
       radius: radius,
       fillColor: color,
-    //   color: "#222",
       weight: 0.5,
       fillOpacity: 0.9,
       stroke: "#e5e5e5",
@@ -294,36 +399,37 @@ function preparePozosClusters(pozJson) {
 
     // Popup con detalle
     const pozoId = p.pozo || p.idpozo || "Sin ID";
-    const recurso = p.tipo_de_recurso || "Sin ID";
     const pozoSigla = p.sigla || p.idpozo || "Sin ID";
     const popup = `
       <b>Pozo:</b> ${pozoSigla}<br>
-      <b>Tipo:</b> ${recurso}<br>
-      <b>Yacimiento:</b> ${p.yacimiento || "N/D"}<br>
-      <b>Empresa dueña:</b> ${p.empresa || p.empresa_operadora || "N/D"}<br>
-      <b>Petroleo (2024-25):</b> ${pet.toLocaleString()} m³<br>
-      <b>Gas (2024-25):</b> ${gas.toLocaleString()} m³
+      <b>Yacimiento:</b> ${p.areayacimiento || "N/D"}<br>
+      <b>Empresa:</b> ${p.empresa || p.empresa_operadora || "N/D"}<br>
+      <hr>
+      <b>Producción 2025:</b><br>
+      <b>Petróleo:</b> ${pet.toLocaleString()} m³<br>
+      <b>Gas:</b> ${gas.toLocaleString()} m³
     `;
-    //   <b>Operador:</b> ${p.operador || "N/D"}<br>
     marker.bindPopup(popup);
 
     // Elegir cluster según tipo
-    const t = tipo_empresa.toUpperCase();
+    const t = tipo_empresa.toUpperCase();    
     if (t.includes("YPF")) clusterYPF.addLayer(marker);
-    // else if (t.includes("ARG") || ["VISTA","CAPEX","PLUSPETROL","PETERSEN","PAMPA","PETROARGENTINA","PETROANDINA"].some(x => t.includes(x))) clusterARG.addLayer(marker);
-    else if (["TOTAL", "CHEVRON", "FLXS"].some(x => t.includes(x))) clusterEXT.addLayer(marker);
+    else if (["TOTAL", "CHEVRON", "FLXS", "SHELL", "KILWER"].some(x => t.includes(x))) clusterEXT.addLayer(marker);
     else clusterARG.addLayer(marker);
   });
-
-  // Por defecto no añadir clusters al mapa; se añadirán cuando el usuario haga click en un yacimiento
 }
 
-//  Mostrar pozos de un yacimiento al click
-let currentShownYacimiento = null;
-let activePozosLayers = []; // guardamos los clusters activos en el mapa
+function showPozosForYacimiento(yacName, pozos, shapes, circulo) {
+  let currentYac=null;
 
-function showPozosForYacimiento(yacName, pozos) {
-// Si ya hay pozos mostrados, removerlos del mapa antes de cargar nuevos
+  // Quitar clase 'no' de todos los paths activos (circulos de yacimientos)
+  let activePozos = document.querySelectorAll('.leaflet-interactive');
+  activePozos.forEach(p => { 
+    if (p.classList.contains('no')) {p.classList.remove('no');}
+  });
+  // Agregar clase 'no' al círculo del yacimiento seleccionado
+  circulo?circulo._path.classList.add('no'):null;
+  // Si ya hay pozos mostrados, removerlos del mapa antes de cargar nuevos
   if (activePozosLayers.length > 0) {
     activePozosLayers.forEach(c => {
       try { map.removeLayer(c); } catch (e) {}
@@ -331,15 +437,15 @@ function showPozosForYacimiento(yacName, pozos) {
     activePozosLayers = [];
   }
   currentShownYacimiento = yacName;
-
+  
   // Vaciar clusters actuales del mapa
-  if (map.hasLayer(clusterYPF)) map.removeLayer(clusterYPF);
-  if (map.hasLayer(clusterARG)) map.removeLayer(clusterARG);
   if (map.hasLayer(clusterEXT)) map.removeLayer(clusterEXT);
+  if (map.hasLayer(clusterARG)) map.removeLayer(clusterARG);
+  if (map.hasLayer(clusterYPF)) map.removeLayer(clusterYPF);
 
   // Crear clusters nuevos filtrando pozos por yacimiento
   const features = pozos.features.filter(f => {
-    const p = f.properties || {};
+    const p = f.properties || {};    
     return (p.areayacimiento || "").toString().toUpperCase() === yacName.toUpperCase();
   });  
 
@@ -350,12 +456,12 @@ function showPozosForYacimiento(yacName, pozos) {
   }
 
   // Crear clusters temporales vacíos
-  const tmpYPF = L.markerClusterGroup({ iconCreateFunction: clusterIconCreate, disableClusteringAtZoom: 5 });
-  const tmpARG = L.markerClusterGroup({ iconCreateFunction: clusterIconCreate, disableClusteringAtZoom: 5 });
   const tmpEXT = L.markerClusterGroup({ iconCreateFunction: clusterIconCreate, disableClusteringAtZoom: 5 });
+  const tmpARG = L.markerClusterGroup({ iconCreateFunction: clusterIconCreate, disableClusteringAtZoom: 5 });
+  const tmpYPF = L.markerClusterGroup({ iconCreateFunction: clusterIconCreate, disableClusteringAtZoom: 5 });
 
   // Llenarlos con markers filtrados (miramos tipo_empresa)
-  features.forEach(f => {
+  features.forEach(f => {   
     const p = f.properties || {};
     const coords = f.geometry && f.geometry.coordinates;
     if (!coords) return;
@@ -364,9 +470,11 @@ function showPozosForYacimiento(yacName, pozos) {
     const color = p.color || colorFromType(tipo_empresa);
     const pet = Number(p.prod_pet || 0), gas = Number(p.prod_gas || 0);
     const radius = Math.max(3, Math.log1p(pet + gas) * 0.9);
-    const recurso = p.tipo_de_recurso || "Sin ID";
     const pozoSigla = p.sigla || p.idpozo || "Sin ID";
+    
+    if(window.activeShape){ try{ map.removeLayer(window.activeShape);}catch(e){} window.activeShape=null; }
 
+    // Marcador de pozo
     const marker = L.circleMarker([lat, lng], {
       radius: radius,
       fillColor: color,
@@ -375,12 +483,11 @@ function showPozosForYacimiento(yacName, pozos) {
       fillOpacity: 0.9,
       tipo_empresa: tipo_empresa
     });
-    marker.feature = f;
+    marker.feature = f;    
 
     // Popup con detalle
     const popup = `
       <b>Pozo:</b> ${pozoSigla}<br>
-      <b>Tipo:</b> ${recurso}<br>
       <b>Yacimiento:</b> ${p.areayacimiento || "N/D"}<br>
       <b>Empresa:</b> ${p.empresa || p.empresa_operadora || "N/D"}<br>
       <hr>
@@ -388,19 +495,28 @@ function showPozosForYacimiento(yacName, pozos) {
       <b>Petróleo:</b> ${pet.toLocaleString()} m³<br>
       <b>Gas:</b> ${gas.toLocaleString()} m³
     `;
-    //<b>Operador:</b> ${p.operador || "N/D"}<br>
     marker.bindPopup(popup);
 
     if (tipo_empresa.includes("YPF")) tmpYPF.addLayer(marker);
-    // else if (tipo_empresa.includes("ARG") || ["VISTA","CAPEX","PLUSPETROL","PETERSEN","PAMPA","PETROARGENTINA","PETROANDINA"].some(x => tipo_empresa.includes(x))) tmpARG.addLayer(marker);
-    else if (["TOTAL", "CHEVRON", "FLXS"].some(x => tipo_empresa.includes(x))) tmpEXT.addLayer(marker);
+    else if (["TOTAL", "CHEVRON", "FLXS", "SHELL", "KILWER"].some(x => tipo_empresa.includes(x))) tmpEXT.addLayer(marker);
     else tmpARG.addLayer(marker);
+
+    // Dibujar el shape del yacimiento seleccionado
+    currentYac = p.areayacimiento || "";
+    const sh = shapes.features.find(s => (s.properties.areayacimiento && s.properties.areayacimiento.toString()) == currentShownYacimiento);
+    currentShownYacimiento = p.areayacimiento || "";
+
+    if (sh) {
+      window.activeShape = L.geoJSON(sh, { style: { color: color, weight: 1.5, dashArray: "3,3", fillOpacity: 0.3 }});
+      window.activeShape.addTo(map);
+      try { map.fitBounds(window.activeShape.getBounds().pad(0.12)); } catch (e) {}
+    }
   });
 
   // Añadir clusters al mapa según filtros activos
-  if (showYPF) { tmpYPF.addTo(map); activePozosLayers.push(tmpYPF); }
-  if (showARG) { tmpARG.addTo(map); activePozosLayers.push(tmpARG); }
   if (showEXT) { tmpEXT.addTo(map); activePozosLayers.push(tmpEXT); }
+  if (showARG) { tmpARG.addTo(map); activePozosLayers.push(tmpARG); }
+  if (showYPF) { tmpYPF.addTo(map); activePozosLayers.push(tmpYPF); }
 
   // ajustar vista al bounds de los markers si existen
   const groupAll = L.featureGroup();
@@ -417,7 +533,7 @@ function showPozosForYacimiento(yacName, pozos) {
 function showAllYacimientos() {
     // Si ya hay pozos mostrados, removerlos del mapa antes de cargar nuevos
   if (activePozosLayers.length > 0) {
-    activePozosLayers.forEach(c => {
+    activePozosLayers.forEach(c => {      
       try { map.removeLayer(c); } catch (e) {}
     });
     activePozosLayers = [];
@@ -428,12 +544,11 @@ function showAllYacimientos() {
     window._tmpClusters = [];
   }
   // quitar clusters permanentes si existían
-  if (map.hasLayer(clusterYPF)) map.removeLayer(clusterYPF);
-  if (map.hasLayer(clusterARG)) map.removeLayer(clusterARG);
   if (map.hasLayer(clusterEXT)) map.removeLayer(clusterEXT);
+  if (map.hasLayer(clusterARG)) map.removeLayer(clusterARG);
+  if (map.hasLayer(clusterYPF)) map.removeLayer(clusterYPF);
 
   // reanudar mostrar los yacimientos
-  updateYacimientosVisibility();
   currentShownYacimiento = null;
   // opcional: ajustar bounds al conjunto de yacimientos visibles
   const boundsGroup = L.featureGroup();
@@ -441,18 +556,19 @@ function showAllYacimientos() {
     g.eachLayer(l => boundsGroup.addLayer(l));
   });
   if (boundsGroup.getLayers().length) map.fitBounds(boundsGroup.getBounds().pad(0.3));
+  
 }
 
 //  Manejo de filtros (checkboxes)
 function updateYacimientosVisibility() {
-  // limpiar todos
+  // limpiar todos    
   try { yacYPF.remove(); } catch(e){}
   try { yacARG.remove(); } catch(e){}
   try { yacEXT.remove(); } catch(e){}
-  // añadir según flags
-  if (showYPF) yacYPF.addTo(map);
-  if (showARG) yacARG.addTo(map);
+  // añadir según flags 
   if (showEXT) yacEXT.addTo(map);
+  if (showARG) yacARG.addTo(map);
+  if (showYPF) yacYPF.addTo(map);
 }
 
 //  Controles filtros
@@ -460,42 +576,26 @@ const controlDiv = L.control({position: 'topright'});
 controlDiv.onAdd = function () {
   const d = L.DomUtil.create('div','legend');
   d.innerHTML = `<div>
-    <h3 id="tituMapa">YACIMIENTO PETROLÍFERO VACA MUERTA</h3>
-    <div id="filtros">
-        <p style="font-weight:bold; margin:0px 6px;display:inline-block;">Filtro por empresas</p>
-        <label><input id="chkYPF" type="checkbox" checked/> <span class="sw" style="background:${COLOR_YPF}"></span>YPF</label>
-        <label><input id="chkARG" type="checkbox" checked/> <span class="sw" style="background:${COLOR_ARG}"></span>ARGENTINAS</label>
-        <label><input id="chkEXT" type="checkbox" checked/> <span class="sw" style="background:${COLOR_EXT}"></span>EXTRANJERAS</label>
-        <a id="btnReset" class="btn" href="#">Ver todos los yacimientos</a>
-    </div>
+     <div id="filtros">
+        <p style="font-weight:bold; margin:0px 6px;display:inline-block;">Filtro por empresa</p>
+        <button id="chkYPF" class="btn filtro-btn" data-tipo="YPF">YPF</button>
+        <button id="chkARG" class="btn filtro-btn" data-tipo="ARG">OTRAS ARGENTINAS</button>
+        <button id="chkEXT" class="btn filtro-btn" data-tipo="EXT">EXTRANJERAS</button>
+        <button id="btnReset" class="btn">Ver todos los yacimientos</button>
+      </div>
     </div>`;
   return d;
 };
 controlDiv.addTo(map);
-
-document.getElementById('btnReset').addEventListener('click', (e) => {
-  e.preventDefault();
-  // Borrar cualquier pozo filtrado y mostrar todos los yacimientos
-  showAllYacimientos();
-});
-
-// cuando cambian checkboxes aplicamos cambios a yacimientos y a clusters temporales
-document.getElementById('chkYPF').addEventListener('change', (e) => {
-  showYPF = e.target.checked;
-  updateYacimientosVisibility();
-  // actualizar clusters mostrados
-  if (currentShownYacimiento) showPozosForYacimiento(currentShownYacimiento);
-});
-document.getElementById('chkARG').addEventListener('change', (e) => {
-  showARG = e.target.checked;
-  updateYacimientosVisibility();
-  if (currentShownYacimiento) showPozosForYacimiento(currentShownYacimiento);
-});
-document.getElementById('chkEXT').addEventListener('change', (e) => {
-  showEXT = e.target.checked;
-  updateYacimientosVisibility();
-  if (currentShownYacimiento) showPozosForYacimiento(currentShownYacimiento);
-});
+const actualizacion = L.control({position: 'bottomleft'});
+actualizacion.onAdd = function () {
+  const d = L.DomUtil.create('div','actualizacion');
+  d.innerHTML = `<div>
+     <p style="font-size:11px; margin:0px 6px;display:inline-block;">Datos de pozos y yacimientos actualizados al 21.10.2025</p>
+    </div>`;
+  return d;
+};
+actualizacion.addTo(map);
 
 </script>
 </body>
