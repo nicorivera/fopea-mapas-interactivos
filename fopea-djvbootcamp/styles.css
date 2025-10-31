@@ -1,0 +1,254 @@
+/* Reset general */
+html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Zilla Slab', serif;
+}
+/* Titulo */
+h1{
+    text-align: right;
+    margin: auto;
+    margin-right: 20px;
+    color: #325284;
+    font-size: 50px;
+    font-weight: 200;
+}
+/* Subtitulo */
+h2{
+    text-align: right;
+    margin: 20px auto;
+    margin-right: 20px;
+    background-color: #0178D6;
+    padding: 15px 20px;
+    color: white;
+    width: fit-content;
+    font-family: "Roboto Flex", sans-serif;
+    font-weight: 200;
+}
+h2 span{
+    font-weight: 800;
+}
+/* Bajada */
+.bajada{
+    font-family: "Roboto Flex", sans-serif;
+    text-align: right;
+    width: 35%;
+    margin: 20px auto;
+    margin-right: 20px;
+    padding: 15px 20px;
+    background-color: #325284;
+    color: white;
+    line-height: 1.5;
+}
+/* Por Data Journalism Visualization Bootcamp */
+.por{
+    text-align: right;
+    font-size: 14px;
+    margin: 5px auto;
+    margin-right: 20px;
+    font-family: "Roboto Flex", sans-serif;
+    font-weight: 200;
+}
+.por span{
+    font-weight: 600;
+}
+/* Titulos secciones */
+h3, #tituMapa{
+    text-align: center;
+    margin: 50px auto;
+    font-size: 27px;
+}
+#tituMapa{
+    margin-bottom: 13px;
+}
+/* Aclaracion de graficos */
+.aclara{
+    text-align: center;
+    font-size: 14px;
+    margin: -40px auto 20px;
+    font-family: "Roboto Flex", sans-serif;
+    font-weight: 200;
+}
+/* Imagen temporal de graficos */
+#graficos{
+    width: 57%;
+    margin: auto;
+    display: block;
+}
+/* Div contenedor de textos */
+.columna{
+    width: 50%;
+    margin: 50px auto 100px;
+}
+/* Textos generales */
+.tex{
+    font-size: 20px;
+    line-height: 1.6;
+    font-weight: 300;
+}
+.tex span{
+    font-weight: 600;
+}
+/* Primer letra de primer parrafo */
+#uno::first-letter {
+    font-size: 75px;
+    font-weight: 500;
+    float: left;
+    line-height: .85;
+    margin-right: 10px;
+    color: #0178D6;
+}
+/* Div contenedor de numeros destacados */
+#numeros{
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+    margin: 50px auto 100px;
+    width: 50%;
+}
+/* Numeros destacados */
+.numIzq, .numDer{
+    width: 50%;
+    text-align: center;
+    margin: auto;
+    justify-content: center;
+    padding: 0 20px;
+}
+.numIzq{
+    border-right: 1px solid #000;
+}
+.num{
+    font-size: 45px;
+    font-weight: 800;
+    font-family: "Roboto Flex", sans-serif;
+    margin: 10px auto;
+    color: #0178D6;
+}
+/* Textos de numeros destacados */
+.texNum{
+    width: 80%;
+    font-size: 18px;
+    line-height: 1.5;
+    font-family: "Roboto Flex", sans-serif;
+    margin: 10px auto 20px;
+    font-weight: 600;
+}
+/* Div contenedor de tipos de hidrocarburos */
+#tipos{
+    display: flex;
+    justify-content: space-around;
+    align-content: space-evenly;
+    margin: 50px auto 100px;
+    width: 50%;
+    gap: 0 20px;
+    font-family: "Roboto Flex", sans-serif;
+}
+.cuadro{
+    padding: 10px 20px;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+#convencional{
+    background-color: #F0F0F0;
+}
+#noConvencional{
+    background-color: #CFE9F8;
+}
+/* Titulos tipos hidrocarburos */
+#tipos .cuadro h4{
+    font-size: 22px;
+    text-align: center;
+    margin: 20px auto;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #000;
+    width: 100%;
+    font-weight: 100;
+}
+/* Lista punteada de caracteristicas */
+#tipos .cuadro ul{
+    display: flex;
+    align-content: space-around;
+    justify-content: start;
+    flex-direction: column;
+    padding-inline-start: 1.3em;
+}
+/* Caracteristicas */
+#tipos .cuadro ul li.texCuadro{
+    margin: 10px 0 20px;
+    justify-items: flex-start;
+    align-items: flex-start;
+    font-size: 16.5px;
+    font-weight: 200;
+    line-height: 1.5;
+    letter-spacing: -.2px;
+}
+#tipos .cuadro ul li.texCuadro span{
+    font-weight: 600;
+}
+/* Div contenedor del pozo mas profundo */
+#prof{
+    width: 50%;
+    background-color: #CFE9F8;
+    margin: 50px auto 100px;
+    padding: 30px 20px 20px;
+}
+/* Titulo pozo mas profundo */
+#prof h3{
+    text-align: center;
+    margin: 10px auto 20px;
+}
+/* Texto pozo mas profundo */
+#prof .tex{
+    width: 90%;
+    margin: 20px auto;
+}
+/* Footer */
+#footer{
+    width: 100%;
+    background-color: #325284;
+    color: white;
+    padding: 20px 20px 50px;
+    text-align: center;
+    font-family: "Roboto Flex", sans-serif;
+    font-size: 14px;
+    font-weight: 200;
+}
+.tituFoo{
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.nombre span{
+    font-weight: 600;
+}
+
+/* Estilos mapa interactivo */
+#map { height:100vh; margin:0; padding:0; }
+.legend { width:100%;height:60px;float: none!important; background:white; padding:8px; padding-bottom: 13px; border-radius:3px; box-shadow:none; font-size:13px; text-align: center;margin: 50px auto;position: absolute;left: 50%!important;transform: translateX(-50%)!important;top: -13px!important; }
+.legend label { display:inline-block; vertical-align:middle; margin: 0 20px; font-weight:200;text-transform: uppercase;letter-spacing: 0.5px;}
+.legend .sw { display:inline-block; width:14px; height:14px; margin-right:6px; margin-left: -5px; border-radius:50%; vertical-align:middle; }
+.btn { cursor: pointer; vertical-align: middle; transition: all 0.3s ease; background-color:#fff; width: fit-content; border: 1px solid #000; padding:5px 10px; border-radius:3px; margin-left:6px; display:inline-block; text-decoration:none; }
+.btn:hover { background-color:#000; color:#fff; }
+.leaflet-top.leaflet-right{width: 100%;margin: auto;}
+.leaflet-top.leaflet-left{z-index: 1001; top: -10px;}
+#filtros { display: flex; flex-wrap: wrap; margin: 15px auto; justify-content: center; align-items: center; }
+#btnReset { font-weight:bold; }
+#chkYPF,#chkARG,#chkEXT{background-color: #fff; vertical-align: middle;}
+#chkYPF::before, #chkYPF:hover{background-color: #0178D6 !important;}
+#chkARG::before, #chkARG:hover{background-color: #9BBCDC !important;}
+#chkEXT::before, #chkEXT:hover{background-color: #F4785E !important;}
+input[type="checkbox"] {-webkit-appearance: none;appearance: none;background-color: transparent;margin: 0;width: 2px;height: 16px;transform: translateY(-0.075em);position: relative;}
+input[type="checkbox"]::before {content: "";width: 1px;height: 11px;transition: 0.3s all ease;position: absolute;top: 2px;left: 1px;}
+input[type="checkbox"]:checked::before {background-color: transparent;}
+.leaflet-container a { color: #000; }
+.bot { cursor: pointer;vertical-align: middle; transition: all 0.3s ease; background:#fff; width: fit-content; border: 0.5px solid #000; padding:5px 10px; border-radius:3px; margin-left:6px; display:inline-block; text-decoration:none; color:#000; font-weight:600; }
+.filtro-btn { position: relative; border:1px solid #000; cursor: pointer; border-radius:4px; padding:5px 10px 5px 20px; margin:0px 10px; transition: all 0.2s ease; }
+.filtro-btn::before {content: "";width: 10px;height: 10px;border-radius: 50%; transition: 0.3s all ease;position: absolute;top: 7px;left: 7px;}
+.btn.filtro-btn.no { background-color:#fff !important; }
+.filtro-btn.active { color:#fff; }
+.filtro-btn:hover { background-color:#000; color:#fff; }
+.leaflet-interactive:focus { outline-color: transparent; outline-style: none;}
+.leaflet-interactive.no { opacity:0;}
