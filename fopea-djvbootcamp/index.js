@@ -3,6 +3,45 @@ const COLOR_YPF = "#0178D6";
 const COLOR_ARG = "#9BBCDC";
 const COLOR_EXT = "#F4785E";
 const COLOR_UNKNOWN = "#CCCCCC";
+const crono = document.getElementById('crono');
+const cadena = document.getElementById('cadena');
+const pozo = document.getElementById('pozoProf');
+let isMob = window.innerWidth;
+console.log(crono);
+console.log(cadena);
+console.log(pozo);
+
+
+// Cambiar imagen para el elemento "graficos" según ancho de pantalla
+// if (graficos) {
+//   function updateGraficosImage() {
+    // isMob = window.innerWidth;
+    const cronoMob = 'cronoMob.svg';    // <- reemplazar por tu imagen mobile
+    const cronoDesk = 'crono.svg';  // <- reemplazar por tu imagen desktop
+    const cadenaMob = 'cadenaMob.svg';    // <- reemplazar por tu imagen mobile
+    const cadenaDesk = 'cadena.svg';  // <- reemplazar por tu imagen desktop
+    const pozoMob = 'pozoMob.svg';    // <- reemplazar por tu imagen mobile
+    const pozoDesk = 'pozo.svg';  // <- reemplazar por tu imagen desktop
+
+    // if (graficos.tagName === 'IMG') {
+      crono.src = isMob < 800 ? cronoMob : cronoDesk;
+      cadena.src = isMob < 800 ? cadenaMob : cadenaDesk;
+      pozo.src = isMob < 800 ? pozoMob : pozoDesk;
+    // }
+    //  else {
+    //   graficos.style.backgroundImage = `url("${isMob < 800 ? mobileSrc : desktopSrc}")`;
+    //   graficos.style.backgroundSize = 'cover';
+    //   graficos.style.backgroundPosition = 'center';
+    // }
+  // }
+
+  // updateGraficosImage();
+  // actualizar al redimensionar (debounce)
+  let _resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(_resizeTimer);
+    _resizeTimer = setTimeout(updateGraficosImage, 150);
+  });
 
 function colorFromType(tipo) {
   if (!tipo) return COLOR_UNKNOWN;
@@ -199,7 +238,6 @@ Promise.all([
       activePozosLayers = [];
     }
     // Eliminar el shape anterior si existe
-    console.log('Filtros',window.activeShape);
     map.setView([-38, -68.5], 8);
     // reset botones
     document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
@@ -295,11 +333,11 @@ function createYacimientosLayer(yacJson, allPozos, allShapes) {
 
     // popup con info resumen
     const popupHtml = `
-      <b>Yacimiento:</b> ${yacName}<br>
-      <b>Pozos: ${props.num_pozos || "N/D"}</b><br>
-      <b>Empresa dominante:</b> ${props.tipo_dominante || "N/D"}
+      Yacimiento: <b>${yacName}</b><br>
+      Empresa dominante: <b>${props.tipo_dominante || "N/D"}</b><br>
+      <b>${props.num_pozos || "N/D"} pozos</b>
     `;
-    circle.bindTooltip(`<b>Yacimiento ${yacName}</b><br>${props.num_pozos} pozos`);
+    circle.bindTooltip(`<b>Yacimiento ${yacName}</b><br><b style="color:${color}">${props.tipo_dominante || "N/D"}</b><br>${props.num_pozos} pozos`);
     
     circle.bindPopup(popupHtml);
     
@@ -543,7 +581,22 @@ controlDiv.onAdd = function () {
     </div>`;
   return d;
 };
-controlDiv.addTo(map);
+//  Controles filtros mobile
+const controlDivMob = L.control({position: 'topright'});
+controlDivMob.onAdd = function () {
+  const dMob = L.DomUtil.create('div','legend');
+  dMob.innerHTML = `<div>
+     <div id="filtrosMob">
+        <p style="font-weight:bold; margin:0px 6px;display:block;">Filtro por empresa</p>
+        <div class="bots"><button id="chkYPF" class="btn filtro-btn" data-tipo="YPF">YPF</button>
+        <button id="chkARG" class="btn filtro-btn" data-tipo="ARG">OTRAS ARGENTINAS</button></div>
+        <div class="bots"><button id="chkEXT" class="btn filtro-btn" data-tipo="EXT">EXTRANJERAS</button>
+        <button id="btnReset" class="btn">Ver todos los yacimientos</button></div>
+      </div>
+    </div>`;
+  return dMob;
+};
+isMob <= 800 ? controlDivMob.addTo(map) : controlDiv.addTo(map);
 const actualizacion = L.control({position: 'bottomleft'});
 actualizacion.onAdd = function () {
   const d = L.DomUtil.create('div','actualizacion');

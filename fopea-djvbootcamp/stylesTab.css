@@ -1,0 +1,234 @@
+@media (max-width: 1025px) {
+    .columna{
+        width: 70%;
+        margin: 50px auto 100px;
+    }
+    #crono {
+        width: 100%;
+        margin-right: -8%;
+    }
+    #numeros{
+        width: 70%;
+    }
+    #tipos{
+        width: 70%;
+    }
+    #graficos{
+        width: 80%;
+    }
+    #prof{
+        width: 70%;
+    }
+    #cadena {
+        width: 90%;
+    }
+}
+@media (max-width: 900px) {
+    #map{
+        margin-top: 50px;
+    }
+    .legend { 
+        width:100%;
+        height:90px;
+    }
+    .leaflet-top.leaflet-left{
+        top: 20px;
+    }
+    #filtrosMob { 
+        margin: auto;
+    }
+    #filtrosMob p{
+        width: 100%;
+    }
+    #filtrosMob .bots{
+        width: 100%; 
+        margin: 5px auto;
+    }
+}
+@media (max-width: 800px) {
+    #apertura{
+        height: 90vh;
+    }
+    h1{
+        font-size: 60px;
+    }
+    h2{
+        font-size: 21px;
+    }
+    h3{
+        width: 85%;
+    }
+    .bajada{
+        width: 53%;
+        margin: 15px auto;
+        margin-right: 20px;
+    }
+    #uno::first-letter {
+        font-size: 75px;
+    }
+    
+    .columna{
+        width: 90%;
+    }
+    #crono {
+        width: 55%;
+        margin-right: auto;
+    }
+    #numeros{
+        width: 95%;
+    }
+    #graficos{
+        flex-direction: column;
+        width: 65%;
+    }
+    #graficos h4{
+        font-size: 27px;
+    }
+    #tipos{
+        width: 90%;
+    }
+    #cadena {
+        width: 95%;
+        margin-top: 50px;
+    }
+    #mapaRef{ 
+        top: 130px;
+    }
+
+}
+@media (max-width: 600px) {
+    #apertura{
+        height: 80vh;
+        margin-bottom: 300px;
+        background-image: url('./mapaHeadMob.jpg');
+    }
+    #textAper{
+        position: unset;
+    }
+    h1{
+        font-size: 60px;
+        padding-top: 65vh;
+        text-align: center;
+        margin: auto;
+        width: 100%;
+    }
+    h2{
+        padding: 15px 7%;
+        width: 86%;
+        text-align: center;
+        font-size: 22px;
+        margin: 10px auto 0;
+    }
+    h3 br, h4 br{
+        display: inline;
+    }
+    .bajada {
+        text-align: center;
+        width: 88%;
+        margin: auto;
+        padding: 25px 6%;
+    }
+    .por{
+        text-align: center;
+        margin: 15px auto;
+    }
+    
+    #crono {
+        width: 85%;
+        margin: auto;
+    }
+    #numeros{
+        flex-direction: column;
+        margin-top: -50px;
+    }
+    .numIzq, .numDer {
+        width: 55%;
+    }
+    .numIzq {
+        padding-bottom: 30px;
+        border-right: none;
+        border-bottom: 1px solid #000;
+    }
+    .numDer {
+        padding-top: 30px;
+    }
+    .texNum {
+        width: 100%;
+    }
+    #tipos{
+        flex-direction: column;
+    }
+    #convencional{
+        margin-bottom: 40px;
+    }
+    #tipos .cuadro ul {
+        padding-inline-start: 2.5em;
+    }
+    #tipos .cuadro ul li.texCuadro {
+        min-height: unset;
+        width: 90%;
+    }
+    #graficos{
+        width: 95%;
+    }
+    #prof {
+        width: 85%;
+    }
+    #prof #pozoProf {
+        margin: auto 0;
+        margin-left: -4.5%;
+        width: 109.5%;
+    }
+    #prof .tex {
+        width: 95%;
+        letter-spacing: -.3px;
+        margin: 20px auto;
+    }
+    #cadena {
+        width: 90%;
+    }
+    .nombre, .fuente {
+        width: 90%;
+    }
+    .nombre br, .fuente br{
+        display: inline;
+    }
+    #mapaRef{ 
+        width: 60px;
+        height: 111px;
+        top: 120px;
+        right: 5px;
+    }
+}
+@media (max-width: 500px) {
+    h1{
+        font-size: 50px;
+    }
+    h3{
+        width: 90%;
+        font-size: 28px;
+    }
+    .leaflet-top.leaflet-left{
+        top: 110px;
+    }
+}
+@media (max-width: 400px) {
+    #apertura{
+        background-position: center -20px;
+    }
+    h1 {
+        line-height: 1;
+        padding-top: 57vh;
+    }
+    .numIzq, .numDer {
+        width: 80%;
+        padding: 30px 0;
+    }
+    #prof {
+        width: 80%;
+    }
+    #prof #pozoProf {
+        margin-left: -7%;
+        width: 114%;
+    }
+}

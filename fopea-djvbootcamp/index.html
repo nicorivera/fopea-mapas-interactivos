@@ -12,12 +12,13 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="stylesTab.css" />
 </head>
 <body>
     <div id="apertura">
         <div id="textAper">
             <h1>VACA MUERTA</h1>
-            <h2>LA SEGUNDA TURBINA DE LA ECONOMÍA</h2>
+            <h2>Vaca Muerta como motor productivo del país</h2>
             <p class="bajada">La cuenca neuquina es la principal productora de hidrocarburos de Argentina y tiene un potencial exportador similar al del agro.</p>
             <p class="por">Por <span>Data Journalism Visualization Bootcamp</span></p>
         </div>
@@ -29,7 +30,7 @@
         <p class="tex">Con el shale y la extracción no convencional, los hidrocarburos se encuentran alojados en rocas con baja permeabilidad o muy compactas, donde no fluyen con facilidad y para su extracción se requiere de una técnica relativamente moderna, desarrollada desde mitad siglo pasado en la costa Este de Estados Unidos, conocida como fractura hidráulica o fracking, que consiste en perforación horizontal con muchas etapas o punciones a la roca.</p>
         <!-- <p class="tex"></p> -->
     </div>
-    <h3>Cronología del descubrimiento y explotación</h3>
+    <h3>Cronología del descubrimiento<br> y la explotación</h3>
     <img id="crono" src="cronologia.jpg" alt="">
     <h3>La importancia económica</h3>
     <div class="columna">
@@ -40,15 +41,15 @@
     <div id="numeros">
         <div class="numIzq">
             <p class="num">4º</p>
-            <p class="texNum">Reserva de petróleo no convencional en el mundo</p>
+            <p class="texNum">Reserva de petróleo <br>no convencional <br><span>en el mundo</span></p>
         </div>
         <div class="numDer">
             <p class="num">2º</p>
-            <p class="texNum">Reserva de gas natural no convencional en el mundo</p>
+            <p class="texNum">Reserva de gas natural <br>no convencional <br><span>en el mundo</span></p>
         </div>
     </div>
     
-    <h3>Tipos de extracción de petróleo y gas</h3>
+    <h3>Tipos de extracción <br>de petróleo y gas</h3>
     <div id="tipos">
         <div class="cuadro" id="convencional">
             <h4>Convencional</h4>
@@ -80,39 +81,48 @@
     </div>
     <h3 id="tituMapa">Todos los yacimientos no convencionales de Vaca Muerta</h3>
     <div id="map">
-        <img id="mapaRef" src="../Argentina-mapa.svg" alt="">
+        <img id="mapaRef" src="./Argentina-mapa.svg" alt="">
     </div>
-    <h3>Los números de la producción no convencional</h3>
-    <p class="aclara">Cifras en millones de m3</p>
-    <img id="graficos" src="graficos.jpg" alt="">
+    <h3>Los números de la <br>producción no convencional</h3>
+    <p class="aclara">Cifras en millones de metros cúbicos</p>
+    <div id="graficos">
+        <div class="contGraf">
+            <h4>Petróleo</h4>
+            <img class="graf" src="petroleo.svg" alt="">
+        </div>
+        <div class="contGraf">
+            <h4>Gas</h4>
+            <img class="graf" src="gas.svg" alt="">
+        </div>
+    </div>
     <div id="prof">
         <h3>El pozo más profundo</h3>
-        <p class="tex">Hasta el momento, el pozo con la rama lateral más larga en Vaca Muerta es LC SOil-476 (h) del yacimiento Loma Campana de YPF y que alcanzó 5114 metros horizontales, casi lo mismo que dos vueltas a la Avenida 9 de Julio. En total se trata de 8376 de caños a más de 3200 metros de profundidad.</p>
-        <img id="pozoProf" src="pozo.jpg" alt="">
+        <p class="tex">Hasta el momento, el pozo con la rama lateral más larga en Vaca Muerta es LC SOil-476 (h) del yacimiento Loma Campana de YPF y que alcanzó 5114 metros horizontales, un poco más que la extensión de la línea A de subterráneos entre sus estaciones Plaza de Mayo y Puán. En total se trata de 8376 caños a más de 3200 metros de profundidad.</p>
+        <img id="pozoProf" src="pozo.svg" alt="">
     </div>
-    <h3>¿En qué consiste la cadena de valor?</h3>
+    <h3>Cadena de valor <br>de petróleo y gas</h3>
     <div class="columna">
         <p class="tex">En el <span>upstream</span>, tanto el petróleo como el gas no convencional comparten los procesos de exploración y explotación. En esta etapa se identifican formaciones geológicas con potencial, como las lutitas, y se utilizan técnicas como la perforación horizontal y la fracturación hidráulica para liberar los hidrocarburos atrapados en la roca.</p>
         <p class="tex">En el <span>midstream</span>, ambos requieren transporte desde el sitio de extracción hasta las plantas de procesamiento, pero aquí comienzan a diferenciarse. El petróleo se transporta mediante oleoductos o camiones cisterna hacia las refinerías, mientras que el gas natural se mueve a través de gasoductos o como gas natural licuado (GNL) hacia plantas donde se deshidrata, se eliminan impurezas y se separan los líquidos del gas.</p>
         <p class="tex">En el <span>downstream</span>, el petróleo es refinado para producir combustibles como gasolina, diésel o queroseno, que luego se distribuyen y comercializan en mercados locales e internacionales. Por su parte, el gas es procesado para separar componentes como metano, etano o propano, y se comercializa para uso industrial, generación eléctrica o exportación.</p>
     </div>
-    <h3>Cadena de valor de petróleo y gas</h3>
-    <img id="cadena" src="cadenaValor.jpg" alt="">
+    <h4>¿En qué consiste <br>la cadena de valor?</h4>
+    <img id="cadena" src="cadena.svg" alt="">
     <h3>Vaca Muerta como motor productivo del país</h3>
     <div class="columna">
         <p class="tex">En diciembre de 2019, Neuquén se consolidó como la provincia que más hidrocarburos generó en el país, superando a Chubut. </p>
         <p class="tex">Desde entonces, y de la mano de Vaca Muerta, comenzó a marcar el horizonte productivo de gas y petróleo.</p>
         <p class="tex">En septiembre de 2025 alcanzó un récord de producción de petróleo con un total de 566.967 barriles por día, de los cuales 545.133 son producto de la actividad no convencional, lo que representa el 67% del total del país.</p>
         <p class="tex">En el próximo lustro se espera que las exportaciones derivadas de los hidrocarburos de Vaca Muerta, el GNL y el crudo, podrían alcanzar los 40 mil millones de dólares y revertir la ecuación con las divisas que genera el agro.</p>
-        <p class="tex">Las estimaciones de la Bolsa de Comercio de Rosario marcan que en 2030 ingresaron 74 mil millones de dólares por exportaciones, el 53%, unos 39,2 miles de millones de dólares, serán del sector energético, mientras el 47% del campo.</p>
+        <p class="tex">Las estimaciones de la Bolsa de Comercio de Rosario marcan que en 2030 ingresarán 74 mil millones de dólares por exportaciones, el 53%, unos 39,2 miles de millones de dólares, serán del sector energético, mientras el 47% del campo.</p>
     </div>
     <div id="footer">
         <p class="tituFoo"><span>Data Journalism Visualization Bootcamp</span></p>
-        <p class="nombre">Mentora DJV Bootcamp: <span>Mariana Trigo Viera</span></p>
-        <p class="nombre">Producción periodística: <span>Martín Castro, Silvina Chang</span></p>
-        <p class="nombre">Diseño: <span>Catalina Magnetti</span></p>
-        <p class="nombre">Programación: <span>Cynthia Figueroa, Nicolás Rivera</span></p>
-        <p class="fuente">Fuentes: Secretaría de Energía de la Nación, Ministerio de Economía de la Nación, Instituto Argentino de Petróleo y Gas (IAPG), YPF</p>
+        <p class="nombre">Mentora DJV Bootcamp: <br><span>Mariana Trigo Viera</span></p>
+        <p class="nombre">Producción periodística: <br><span>Martín Castro, Silvina Chang</span></p>
+        <p class="nombre">Diseño: <br><span>Catalina Magnetti</span></p>
+        <p class="nombre">Programación: <br><span>Cynthia Figueroa, Nicolás Rivera</span></p>
+        <p class="fuente">Fuentes: <br><a href="http://datos.energia.gob.ar/dataset" target="_blank">Secretaría de Energía de la Nación</a>, <br><a href="https://www.argentina.gob.ar/economia" target="_blank">Ministerio de Economía de la Nación</a>, <br><a href="https://iapg.org.ar/" target="_blank">Instituto Argentino de Petróleo y Gas (IAPG)</a>, <br><a href="https://negocios.ypf.com/oil-gas.html" target="_blank">YPF</a></p>
     </div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>

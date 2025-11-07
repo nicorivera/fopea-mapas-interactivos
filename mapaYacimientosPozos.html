@@ -338,11 +338,13 @@ function createYacimientosLayer(yacJson, allPozos, allShapes) {
 
     // popup con info resumen
     const popupHtml = `
-      <b>Yacimiento:</b> ${yacName}<br>
-      <b>Pozos: ${props.num_pozos || "N/D"}</b><br>
-      <b>Empresa dominante:</b> ${props.tipo_dominante || "N/D"}
+      Yacimiento: <b>${yacName}</b><br>
+      Empresa dominante: <b>${props.tipo_dominante || "N/D"}</b><br>
+      <b>${props.num_pozos || "N/D"} pozos</b>
     `;
-    circle.bindTooltip(`<b>Yacimiento ${yacName}</b><br>${props.num_pozos} pozos`);
+    console.log(color);
+    
+    circle.bindTooltip(`<b>Yacimiento ${yacName}</b><br><b style="color:${color}">${props.tipo_dominante || "N/D"}</b><br>${props.num_pozos} pozos`);
     
     circle.bindPopup(popupHtml);
     
