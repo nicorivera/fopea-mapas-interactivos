@@ -7,40 +7,23 @@ const crono = document.getElementById('crono');
 const cadena = document.getElementById('cadena');
 const pozo = document.getElementById('pozoProf');
 let isMob = window.innerWidth;
-console.log(crono);
-console.log(cadena);
-console.log(pozo);
-
 
 // Cambiar imagen para el elemento "graficos" según ancho de pantalla
-// if (graficos) {
-//   function updateGraficosImage() {
-    // isMob = window.innerWidth;
-    const cronoMob = 'cronoMob.svg';    // <- reemplazar por tu imagen mobile
-    const cronoDesk = 'crono.svg';  // <- reemplazar por tu imagen desktop
-    const cadenaMob = 'cadenaMob.svg';    // <- reemplazar por tu imagen mobile
-    const cadenaDesk = 'cadena.svg';  // <- reemplazar por tu imagen desktop
-    const pozoMob = 'pozoMob.svg';    // <- reemplazar por tu imagen mobile
-    const pozoDesk = 'pozo.svg';  // <- reemplazar por tu imagen desktop
+  const cronoMob = 'cronoMob.svg';    // <- imagen Cronologia mobile
+  const cronoDesk = 'crono.svg';  // <- imagen Cronologia desktop
+  const cadenaMob = 'cadenavalorMob.svg';    // <- imagen Cadena mobile
+  const cadenaDesk = 'cadenavalor.svg';  // <- imagen Cadena desktop
+  const pozoMob = 'pozoMob.svg';    // <- imagen Pozo mobile
+  const pozoDesk = 'pozo.svg';  // <- imagen Pozo desktop
 
-    // if (graficos.tagName === 'IMG') {
-      crono.src = isMob < 800 ? cronoMob : cronoDesk;
-      cadena.src = isMob < 800 ? cadenaMob : cadenaDesk;
-      pozo.src = isMob < 800 ? pozoMob : pozoDesk;
-    // }
-    //  else {
-    //   graficos.style.backgroundImage = `url("${isMob < 800 ? mobileSrc : desktopSrc}")`;
-    //   graficos.style.backgroundSize = 'cover';
-    //   graficos.style.backgroundPosition = 'center';
-    // }
-  // }
+  crono.src = isMob < 800 ? cronoMob : cronoDesk;
+  cadena.src = isMob < 800 ? cadenaMob : cadenaDesk;
+  pozo.src = isMob < 800 ? pozoMob : pozoDesk;
 
-  // updateGraficosImage();
   // actualizar al redimensionar (debounce)
   let _resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(_resizeTimer);
-    _resizeTimer = setTimeout(updateGraficosImage, 150);
   });
 
 function colorFromType(tipo) {
@@ -121,7 +104,7 @@ const map = L.map("map").setView([-38, -68.5], 8);
     attribution: '<a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | <a href="http://www.ign.gob.ar/AreaServicios/Argenmap/IntroduccionV2" target="_blank">Instituto Geográfico Nacional</a> + <a href="http://www.osm.org/copyright" target="_blank">OpenStreetMap</a>',
     minZoom: 3,
     maxZoom: 18,
-    opacity: 0.5
+    opacity: 0.5,
   }).addTo(map);
   // L.tileLayer.grayscale('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
   //   attribution: 'Map data &copy; <a href="https://openstreetmap.org/">OpenStreetMap</a> contributors',
@@ -138,7 +121,8 @@ fetch("cuenca_neuquina_area_from_zip.geojson")
     }).bindPopup("<b>Área hidrocarburífera<br>Vaca Muerta</b>");
     contornoLayer.addTo(map);
   });
-
+// Previene el zoom inicial en el mapa al scrollear
+map.scrollWheelZoom.disable();
 window.activeShape = null;
 window.activePozosLayers = [];
 window.currentShownYacimiento = null;
@@ -298,6 +282,17 @@ Promise.all([
   console.error("Error cargando GeoJSONs:", err);
 });
 
+// Saca la tapa del mapa para que se pueda hacer zoom
+function hideTapa(cli){
+  const tapa = document.getElementById('tapa');
+  if(cli){
+    map.scrollWheelZoom.enable();
+  }
+  tapa.addEventListener('click', (e) =>{
+    map.scrollWheelZoom.enable();
+  })
+}
+
 //  Crear yacimientos (vista inicial)
 function createYacimientosLayer(yacJson, allPozos, allShapes) {
   // evitar duplicados por nombre
@@ -344,6 +339,7 @@ function createYacimientosLayer(yacJson, allPozos, allShapes) {
     // Al click mostrar pozos y hacer zoom
     circle.on('click', (e) => {
       // Zoom hacia el punto (o hacia un pequeño bbox)
+      hideTapa('cli');
       map.setView([lat, lng], 10);      
       showPozosForYacimiento(yacName, allPozos, allShapes, circle);
     });
@@ -606,3 +602,4 @@ actualizacion.onAdd = function () {
   return d;
 };
 actualizacion.addTo(map);
+hideTapa();
