@@ -1,3 +1,13 @@
+@media (min-width: 1470px) {
+    #tipos .cuadro ul{
+        min-height: 460px;
+    }
+}
+@media (min-width: 2500px) {
+    #tipos .cuadro ul {
+        min-height: 375px;
+    }
+}
 @media (max-width: 1025px) {
     .columna{
         width: 70%;
@@ -160,12 +170,16 @@
     #convencional{
         margin-bottom: 40px;
     }
+    #tipos .cuadro {
+        width: unset;
+    }
     #tipos .cuadro ul {
-        padding-inline-start: 2.5em;
+        padding-inline-start: 1.5em;
+        min-height: unset;
     }
     #tipos .cuadro ul li.texCuadro {
         min-height: unset;
-        width: 90%;
+        width: 95%;
     }
     #graficos{
         width: 95%;
@@ -214,6 +228,7 @@
 @media (max-width: 400px) {
     #apertura{
         background-position: center -20px;
+        margin-bottom: 200px;
     }
     h1 {
         line-height: 1;

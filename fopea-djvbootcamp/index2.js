@@ -7,40 +7,23 @@ const crono = document.getElementById('crono');
 const cadena = document.getElementById('cadena');
 const pozo = document.getElementById('pozoProf');
 let isMob = window.innerWidth;
-console.log(crono);
-console.log(cadena);
-console.log(pozo);
-
 
 // Cambiar imagen para el elemento "graficos" según ancho de pantalla
-// if (graficos) {
-//   function updateGraficosImage() {
-    // isMob = window.innerWidth;
-    const cronoMob = 'cronoMob.svg';    // <- imagen Cronologia mobile
-    const cronoDesk = 'crono.svg';  // <- imagen Cronologia desktop
-    const cadenaMob = 'cadenavalorMob.svg';    // <- imagen Cadena mobile
-    const cadenaDesk = 'cadenavalor.svg';  // <- imagen Cadena desktop
-    const pozoMob = 'pozoMob.svg';    // <- imagen Pozo mobile
-    const pozoDesk = 'pozo.svg';  // <- imagen Pozo desktop
+  const cronoMob = 'cronoMob.svg';    // <- imagen Cronologia mobile
+  const cronoDesk = 'crono.svg';  // <- imagen Cronologia desktop
+  const cadenaMob = 'cadenavalorMob.svg';    // <- imagen Cadena mobile
+  const cadenaDesk = 'cadenavalor.svg';  // <- imagen Cadena desktop
+  const pozoMob = 'pozoMob.svg';    // <- imagen Pozo mobile
+  const pozoDesk = 'pozo.svg';  // <- imagen Pozo desktop
 
-    // if (graficos.tagName === 'IMG') {
-      crono.src = isMob < 800 ? cronoMob : cronoDesk;
-      cadena.src = isMob < 800 ? cadenaMob : cadenaDesk;
-      pozo.src = isMob < 800 ? pozoMob : pozoDesk;
-    // }
-    //  else {
-    //   graficos.style.backgroundImage = `url("${isMob < 800 ? mobileSrc : desktopSrc}")`;
-    //   graficos.style.backgroundSize = 'cover';
-    //   graficos.style.backgroundPosition = 'center';
-    // }
-  // }
+  crono.src = isMob < 800 ? cronoMob : cronoDesk;
+  cadena.src = isMob < 800 ? cadenaMob : cadenaDesk;
+  pozo.src = isMob < 800 ? pozoMob : pozoDesk;
 
-  // updateGraficosImage();
   // actualizar al redimensionar (debounce)
   let _resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(_resizeTimer);
-    // _resizeTimer = setTimeout(updateGraficosImage, 150);
   });
 
 function colorFromType(tipo) {
@@ -122,7 +105,7 @@ const map = L.map("map").setView([-38, -68.5], 8);
     doubleClickZoom: false,
     minZoom: 6,
     maxZoom: 13,
-    opacity: 0.5
+    opacity: 0.5,
   }).addTo(map);
   // L.tileLayer.grayscale('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
   //   attribution: 'Map data &copy; <a href="https://openstreetmap.org/">OpenStreetMap</a> contributors',
@@ -281,7 +264,7 @@ Promise.all([
     activePozos.forEach(p => { 
       if (p.classList.contains('no')) {p.classList.remove('no');}
     });
-    map.setView([-38, -68.5], 8);
+    map.setView([-38, -68.5], 7);
     // Eliminar el shape anterior si existe
     if (window.activeShape) {
       try { map.removeLayer(window.activeShape);} catch (e) {}
@@ -301,15 +284,15 @@ Promise.all([
 });
 
 // Saca la tapa del mapa para que se pueda hacer zoom
-const tapa = document.getElementById('tapa');
-function hideTapa(cli){
-  if(cli){
-    map.scrollWheelZoom.enable();
-  }
-  tapa.addEventListener('click', (e) =>{
-    map.scrollWheelZoom.enable();
-  })
-}
+// const tapa = document.getElementById('tapa');
+// function hideTapa(cli){
+//   if(cli){
+//     map.scrollWheelZoom.enable();
+//   }
+//   tapa.addEventListener('click', (e) =>{
+//     map.scrollWheelZoom.enable();
+//   })
+// }
 
 //  Crear yacimientos (vista inicial)
 function createYacimientosLayer(yacJson, allPozos, allShapes) {
@@ -357,7 +340,7 @@ function createYacimientosLayer(yacJson, allPozos, allShapes) {
     // Al click mostrar pozos y hacer zoom
     circle.on('click', (e) => {
       // Zoom hacia el punto (o hacia un pequeño bbox)
-      hideTapa('cli');
+      // hideTapa('cli');
       map.setView([lat, lng], 11);      
       showPozosForYacimiento(yacName, allPozos, allShapes, circle);
     });
@@ -387,10 +370,7 @@ function preparePozosClusters(pozJson) {
     const color = p.color || colorFromType(tipo_empresa);
     const pet = Number(p.prod_pet || 0);
     const gas = Number(p.prod_gas || 0);
-    const numPet = Intl.NumberFormat('es-AR').format(pet.toFixed(2));
-    const numGas = Intl.NumberFormat('es-AR').format(gas.toFixed(2));
     const totalProd = pet + gas;
-    console.log(pet, numPet, gas, numGas);
 
     // Tamaño de pozo individual según producción (ajustar si se desea)
     const radius = Math.max(3, Math.log1p(totalProd) * 0.3);
@@ -418,11 +398,10 @@ function preparePozosClusters(pozJson) {
       <b>Empresa:</b> ${p.empresa || p.empresa_operadora || "N/D"}<br>
       <hr>
       <b>Producción 2025:</b><br>
-      <b>Petróleo:</b> ${numPet} m³<br>
-      <b>Gas:</b> ${numGas} m³
-      `;
+      <b>Petróleo:</b> ${pet.toLocaleString()} m³<br>
+      <b>Gas:</b> ${gas.toLocaleString()} m³
+    `;
     marker.bindPopup(popup);
-  // let conPunto = new Intl.NumberFormat('es-AR').format(numero);
 
     // Elegir cluster según tipo
     const t = tipo_empresa.toUpperCase();    
@@ -482,8 +461,6 @@ function showPozosForYacimiento(yacName, pozos, shapes, circulo) {
     const tipo_empresa = (p.tipo_empresa || p.empresa || "").toString().toUpperCase();
     const color = p.color || colorFromType(tipo_empresa);
     const pet = Number(p.prod_pet || 0), gas = Number(p.prod_gas || 0);
-    const numPet = Intl.NumberFormat('es-AR').format(pet.toFixed(2));
-    const numGas = Intl.NumberFormat('es-AR').format(gas.toFixed(2));
     const radius = Math.max(3, Math.log1p(pet + gas) * 0.9);
     const pozoSigla = p.sigla || p.idpozo || "Sin ID";
     
@@ -507,8 +484,8 @@ function showPozosForYacimiento(yacName, pozos, shapes, circulo) {
       <b>Empresa:</b> ${p.empresa || p.empresa_operadora || "N/D"}<br>
       <hr>
       <b>Producción 2025:</b><br>
-      <b>Petróleo:</b> ${numPet} m³<br>
-      <b>Gas:</b> ${numGas} m³
+      <b>Petróleo:</b> ${pet.toLocaleString()} m³<br>
+      <b>Gas:</b> ${gas.toLocaleString()} m³
     `;
     marker.bindPopup(popup);
 
@@ -625,5 +602,5 @@ actualizacion.onAdd = function () {
     </div>`;
   return d;
 };
+// hideTapa();
 actualizacion.addTo(map);
-hideTapa();
