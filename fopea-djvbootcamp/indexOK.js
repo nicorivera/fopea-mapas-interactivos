@@ -2,7 +2,7 @@
 const COLOR_YPF = "#0178D6";
 const COLOR_ARG = "#9BBCDC";
 const COLOR_EXT = "#F4785E";
-const COLOR_UNKNOWN = "#999999";
+const COLOR_UNKNOWN = "#CCCCCC";
 const crono = document.getElementById('crono');
 const cadena = document.getElementById('cadena');
 const pozo = document.getElementById('pozoProf');
@@ -30,14 +30,6 @@ let isMob = window.innerWidth;
     //   graficos.style.backgroundPosition = 'center';
     // }
   // }
-  function intensidadPorPozos(n) {
-    if (!n || n <= 0) return 0.15;
-    if (n < 50) return 0.3;
-    if (n < 200) return 0.6;
-    if (n < 500) return 0.8;
-    return 1;
-  }
-
 
   // updateGraficosImage();
   // actualizar al redimensionar (debounce)
@@ -53,14 +45,6 @@ function colorFromType(tipo) {
   
   if (tipo.includes("YPF")) return COLOR_YPF;
   if (["TOTAL", "CHEVRON", "FLXS", "SHELL", "KILWER"].some(x => tipo.includes(x))) return COLOR_EXT;
-  return COLOR_ARG;
-}
-function colorFromDominante(dominante) {
-  if (!dominante) return COLOR_UNKNOWN;
-  dominante = dominante.toUpperCase();
-  
-  if (dominante.includes("YPF")) return COLOR_YPF;
-  if (dominante.includes("EXTRANJERA")) return COLOR_EXT;
   return COLOR_ARG;
 }
 
@@ -146,7 +130,7 @@ fetch("cuenca_neuquina_area_from_zip.geojson")
   .then(r => r.json())
   .then(data => {
     const contornoLayer = L.geoJSON(data, {
-      style: { weight:1, fillColor:"#d0c0a7ff", color:"rgba(0,0,0,0.3)", fillOpacity:0.3 },
+      style: { weight:1, fillColor:"#B9A78A", color:"rgba(0,0,0,0.3)", fillOpacity:0.3 },
       interactive: false
     }).bindPopup("<b>Área hidrocarburífera<br>Vaca Muerta</b>");
     contornoLayer.addTo(map);
@@ -278,7 +262,13 @@ Promise.all([
       window.activeShape = null;
     }
   }
-// botón de reset Ver todos los yacimientos
+
+  // manejar clicks en botones
+  document.getElementById('chkYPF').addEventListener('click', () => activarFiltro('YPF'));
+  document.getElementById('chkARG').addEventListener('click', () => activarFiltro('ARG'));
+  document.getElementById('chkEXT').addEventListener('click', () => activarFiltro('EXT'));
+
+  // botón de reset Ver todos los yacimientos
   document.getElementById('btnReset').addEventListener('click', (e) => {
     e.preventDefault();
     document.querySelectorAll('.btn.filtro-btn').forEach(b => b.classList.remove('active'));
@@ -299,11 +289,6 @@ Promise.all([
     showAllYacimientos();
   });
 
-  // manejar clicks en botones
-  document.getElementById('chkYPF').addEventListener('click', () => activarFiltro('YPF'));
-  document.getElementById('chkARG').addEventListener('click', () => activarFiltro('ARG'));
-  document.getElementById('chkEXT').addEventListener('click', () => activarFiltro('EXT'));
-
   createYacimientosLayer(yacJson, allPozos, allShapes);
   preparePozosClusters(allPozos);
   updateYacimientosVisibility();
@@ -323,205 +308,68 @@ function hideTapa(cli){
 }
 
 //  Crear yacimientos (vista inicial)
-// function createYacimientosLayer(yacJson, allPozos, allShapes) {
-//   // evitar duplicados por nombre
-//   const seen = new Set();
-  
-//   yacJson.features.forEach(f => {
-//     const props = f.properties || {};
-//     const yacName = (props.yacimiento || props.yac || "").toString();
-//     if (!yacName) return;
-//     if (seen.has(yacName)) return;
-//     seen.add(yacName);
-
-//     const coords = f.geometry && f.geometry.coordinates;
-//     if (!coords) return;
-//     const lng = coords[0], lat = coords[1];
-//     const tipo = (props.tipo_dominante || "").toString();
-//     const color = props.color || colorFromType(tipo);
-//     const radio = props.radio ? Number(props.radio) : 40;
-//     // const radio = f.properties.num_pozos < 30 ? 10 :
-//     //               f.properties.num_pozos < 500 ? 20 :
-//     //               f.properties.num_pozos < 1300 ? 30 :
-//     //               f.properties.num_pozos < 2300 ? 40 : 50;
-    
-//     // marker del yacimiento
-//     const circle = L.circleMarker([lat, lng], {
-//       radius: Math.max(2, radio/2), // ajustamos visualmente: radio en el geojson es grande
-//       fillColor: color,
-//       color: "#e5e5e5",
-//       strokeWidth: 0.2,
-//       weight: 0.8,
-//       fillOpacity: 0.7,
-//     });
-
-//     // popup con info resumen
-//     const popupHtml = `
-//       Yacimiento: <b>${yacName}</b><br>
-//       Empresa dominante: <b>${props.tipo_dominante || "N/D"}</b><br>
-//       <b>${props.num_pozos || "N/D"} pozos</b>
-//     `;
-//     circle.bindTooltip(`<b>Yacimiento ${yacName}</b><br><b style="color:${color}">${props.tipo_dominante || "N/D"}</b><br>${props.num_pozos} pozos`);
-    
-//     circle.bindPopup(popupHtml);
-    
-//     // Al click mostrar pozos y hacer zoom
-//     circle.on('click', (e) => {
-//       // Zoom hacia el punto (o hacia un pequeño bbox)
-//       hideTapa('cli');
-//       map.setView([lat, lng], 11);      
-//       showPozosForYacimiento(yacName, allPozos, allShapes, circle);
-//     });
-    
-//     // Agregar al grupo correspondiente según tipo dominante
-//     const tipo_up = (props.tipo_dominante || "").toString().toUpperCase();
-//     if (tipo_up.includes("YPF")) yacYPF.addLayer(circle);
-//     else if (tipo_up.includes("ARG")) yacARG.addLayer(circle);
-//     else yacEXT.addLayer(circle);
-//   });
-
-//   // Agregar todos los grupos al mapa (visibilidad controlada por filtros)
-//   yacEXT.addTo(map);
-//   yacARG.addTo(map);
-//   yacYPF.addTo(map);
-// }
-// function createYacimientosLayer(yacJson, allPozos, allShapes) {
-
-//   const seen = new Set();
-
-//   yacJson.features.forEach(f => {
-//     const props = f.properties || {};
-//     const yacName = (props.yacimiento || props.yac || "").toString();
-//     if (!yacName || seen.has(yacName)) return;
-//     seen.add(yacName);
-
-//     const tipo = (props.tipo_dominante || "").toString();
-//     const baseColor = colorFromType(tipo);
-//     const intens = intensidadPorPozos(props.num_pozos || 0);
-
-//     // Buscar el shape en el GeoJSON de shapes
-//     const shape = allShapes.features.find(
-//       s => s.properties.areayacimiento &&
-//            s.properties.areayacimiento.toString().toUpperCase() === yacName.toUpperCase()
-//     );
-
-//     if (!shape) return;
-
-//     // Dibujar el polígono del yacimiento
-//     const layer = L.geoJSON(shape, {
-//       style: {
-//         color: baseColor,
-//         weight: 1,
-//         fillColor: baseColor,
-//         fillOpacity: intens
-//       }
-//     });
-
-//     // Tooltip del yacimiento
-//     // layer.bindTooltip(
-//     //   `<b>${yacName}</b><br>
-//     //    ${tipo}<br>
-//     //    ${props.num_pozos} pozos`,
-//     //   { sticky: true }
-//     // );
-//     layer.bindTooltip(`<b>Yacimiento ${yacName}</b><br><b style="color:${baseColor}">${props.tipo_dominante || "N/D"}</b><br>${props.num_pozos} pozos`, { sticky: true });
-
-//     // Popup y click (mostrar pozos + zoom al shape)
-//     layer.on("click", () => {
-//       hideTapa("cli");
-//       if (window.activeShape) {
-//         try { map.removeLayer(window.activeShape); } catch(e){}
-//       }
-//       window.activeShape = layer;
-//       map.fitBounds(layer.getBounds().pad(0.2));
-
-//       showPozosForYacimiento(yacName, allPozos, allShapes, layer);
-//     });
-
-//     // Agregar al grupo correspondiente (filtro)
-//     const tipo_up = tipo.toUpperCase();
-//     if (tipo_up.includes("YPF")) yacYPF.addLayer(layer);
-//     else if (tipo_up.includes("ARG")) yacARG.addLayer(layer);
-//     else yacEXT.addLayer(layer);
-//   });
-
-//   yacEXT.addTo(map);
-//   yacARG.addTo(map);
-//   yacYPF.addTo(map);
-// }
 function createYacimientosLayer(yacJson, allPozos, allShapes) {
-
+  // evitar duplicados por nombre
   const seen = new Set();
-
+  
   yacJson.features.forEach(f => {
-    const props = f.properties || {};    
+    const props = f.properties || {};
     const yacName = (props.yacimiento || props.yac || "").toString();
-    if (!yacName || seen.has(yacName)) return;
+    if (!yacName) return;
+    if (seen.has(yacName)) return;
     seen.add(yacName);
 
-    const tipo = (props.tipo_dominante || "").toUpperCase();
-    const baseColor = colorFromDominante(tipo);
-    const intensity = intensidadPorPozos(props.num_pozos || 0);
-
-    // buscar shape
-    const shape = allShapes.features.find(
-      s => s.properties.areayacimiento &&
-           s.properties.areayacimiento.toString().toUpperCase() === yacName.toUpperCase()
-    );
-    if (!shape) return;
-
-    const layer = L.geoJSON(shape, {
-      style: {
-        color: baseColor,
-        weight: 1,
-        fillColor: baseColor,
-        fillOpacity: intensity
-      }
+    const coords = f.geometry && f.geometry.coordinates;
+    if (!coords) return;
+    const lng = coords[0], lat = coords[1];
+    const tipo = (props.tipo_dominante || "").toString();
+    const color = props.color || colorFromType(tipo);
+    const radio = props.radio ? Number(props.radio) : 40;
+    // const radio = f.properties.num_pozos < 30 ? 10 :
+    //               f.properties.num_pozos < 500 ? 20 :
+    //               f.properties.num_pozos < 1300 ? 30 :
+    //               f.properties.num_pozos < 2300 ? 40 : 50;
+    
+    // marker del yacimiento
+    const circle = L.circleMarker([lat, lng], {
+      radius: Math.max(2, radio/2), // ajustamos visualmente: radio en el geojson es grande
+      fillColor: color,
+      color: "#e5e5e5",
+      strokeWidth: 0.2,
+      weight: 0.8,
+      fillOpacity: 0.7,
     });
 
-    // layer.bindTooltip(
-    //   `<b>${yacName}</b><br>${tipo}<br>${props.num_pozos} pozos`,
-    //   { sticky: true }
-    // );
-    layer.bindTooltip(`<b>Yacimiento ${yacName}</b><br><b style="color:${baseColor}">${props.tipo_dominante || "N/D"}</b><br>${props.num_pozos} pozos`, { sticky: true });
-
-    layer.on("click", () => {
-      hideTapa("cli");
-
-      // eliminar shape activo anterior
-      if (window.activeShape) {
-        try { map.removeLayer(window.activeShape); } catch(e){}
-      }
-
-      // nuevo shape activo (borde más grueso y misma intensidad)
-      window.activeShape = L.geoJSON(shape, {
-        style: {
-          color: baseColor,
-          weight: 2.5,
-          fillColor: baseColor,
-          fillOpacity: intensity
-        }
-      }).addTo(map);
-
-      map.fitBounds(window.activeShape.getBounds().pad(0.15));
-
-      // mostrar pozos
-      showPozosForYacimiento(yacName, allPozos, allShapes);
+    // popup con info resumen
+    const popupHtml = `
+      Yacimiento: <b>${yacName}</b><br>
+      Empresa dominante: <b>${props.tipo_dominante || "N/D"}</b><br>
+      <b>${props.num_pozos || "N/D"} pozos</b>
+    `;
+    circle.bindTooltip(`<b>Yacimiento ${yacName}</b><br><b style="color:${color}">${props.tipo_dominante || "N/D"}</b><br>${props.num_pozos} pozos`);
+    
+    circle.bindPopup(popupHtml);
+    
+    // Al click mostrar pozos y hacer zoom
+    circle.on('click', (e) => {
+      // Zoom hacia el punto (o hacia un pequeño bbox)
+      hideTapa('cli');
+      map.setView([lat, lng], 11);      
+      showPozosForYacimiento(yacName, allPozos, allShapes, circle);
     });
-
-    // agregar al grupo correcto
-    if (tipo.includes("YPF")) yacYPF.addLayer(layer);
-    else if (tipo.includes("ARG")) yacARG.addLayer(layer);
-    else yacEXT.addLayer(layer);
+    
+    // Agregar al grupo correspondiente según tipo dominante
+    const tipo_up = (props.tipo_dominante || "").toString().toUpperCase();
+    if (tipo_up.includes("YPF")) yacYPF.addLayer(circle);
+    else if (tipo_up.includes("ARG")) yacARG.addLayer(circle);
+    else yacEXT.addLayer(circle);
   });
 
+  // Agregar todos los grupos al mapa (visibilidad controlada por filtros)
   yacEXT.addTo(map);
   yacARG.addTo(map);
   yacYPF.addTo(map);
 }
-
-
-
 
 //  Preparar pozos en clusters (en memoria)
 function preparePozosClusters(pozJson) {
@@ -532,7 +380,7 @@ function preparePozosClusters(pozJson) {
     if (!coords) return;
     const lng = coords[0], lat = coords[1];
     const tipo_empresa = (p.tipo_empresa || p.empresa || "").toString();
-    const color = p.color || colorFromType(tipo_empresa);    
+    const color = p.color || colorFromType(tipo_empresa);
     const pet = Number(p.prod_pet || 0);
     const gas = Number(p.prod_gas || 0);
     const numPet = Intl.NumberFormat('es-AR').format(pet.toFixed(2));
@@ -578,7 +426,7 @@ function preparePozosClusters(pozJson) {
   });
 }
 
-function showPozosForYacimiento(yacName, pozos, shapes) {
+function showPozosForYacimiento(yacName, pozos, shapes, circulo) {
   let currentYac=null;
 
   // Quitar clase 'no' de todos los paths activos (circulos de yacimientos)
@@ -587,7 +435,7 @@ function showPozosForYacimiento(yacName, pozos, shapes) {
     if (p.classList.contains('no')) {p.classList.remove('no');}
   });
   // Agregar clase 'no' al círculo del yacimiento seleccionado
-  // circulo?circulo._path.classList.add('no'):null;
+  circulo?circulo._path.classList.add('no'):null;
   // Si ya hay pozos mostrados, removerlos del mapa antes de cargar nuevos
   if (activePozosLayers.length > 0) {
     activePozosLayers.forEach(c => {
@@ -668,18 +516,7 @@ function showPozosForYacimiento(yacName, pozos, shapes) {
     currentShownYacimiento = p.areayacimiento || "";
 
     if (sh) {
-      const colorBase = colorFromType(p.tipo_empresa);
-      const intensidad = intensidadPorPozos(features.length);
-
-      window.activeShape = L.geoJSON(sh, { 
-        style: { 
-          color: colorBase,
-          weight: 2,
-          fillColor: colorBase,
-          fillOpacity: intensidad
-        }
-      });
-      // window.activeShape = L.geoJSON(sh, { style: { color: color, weight: 1.5, dashArray: "3,3", fillOpacity: 0.3 }});
+      window.activeShape = L.geoJSON(sh, { style: { color: color, weight: 1.5, dashArray: "3,3", fillOpacity: 0.3 }});
       window.activeShape.addTo(map);
       try { map.fitBounds(window.activeShape.getBounds().pad(0.12)); } catch (e) {}
     }
@@ -727,8 +564,8 @@ function showAllYacimientos() {
   [yacYPF, yacARG, yacEXT].forEach(g => {
     g.eachLayer(l => boundsGroup.addLayer(l));
   });
-  // Ajustar vista al bounds si hay yacimientos visibles
-  // if (boundsGroup.getLayers().length) map.fitBounds(boundsGroup.getBounds().pad(0.3));
+  if (boundsGroup.getLayers().length) map.fitBounds(boundsGroup.getBounds().pad(0.3));
+  
 }
 
 //  Manejo de filtros (checkboxes)

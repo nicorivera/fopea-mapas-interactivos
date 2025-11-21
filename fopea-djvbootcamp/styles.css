@@ -9,11 +9,22 @@ html, body {
 #apertura{
     position: relative;
     height: 90vh;
-    background-image: url('./mapaHead.jpg');
+    background-image: url('./portada.svg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     margin-bottom: 100px;
+    opacity: 0.7;
+}
+#logoFopea, #logoFopeaFoo{
+    width: 230px;
+    display: block;
+    margin: auto;
+    margin-right: 40px;
+}
+#logoFopeaFoo{
+    margin-top: 20px;
+    margin-right: auto;
 }
 #textAper{
     position: absolute;
@@ -86,7 +97,6 @@ h3 br, h4 br{
 #crono{
     width: 90%;
     margin: auto;
-    margin-right: 0;
     display: block;
 }
 
@@ -241,6 +251,11 @@ h3 br, h4 br{
 #tipos .cuadro ul li.texCuadro span{
     font-weight: 600;
 }
+#tipos .cuadro ul li .item{
+    width: 80px;
+    margin: auto;
+    display: block;
+}
 /* Div contenedor del pozo mas profundo */
 #prof{
     width: 50%;
@@ -286,26 +301,67 @@ h4{
     font-size: 14px;
     font-weight: 200;
     margin-top: 150px;
+    line-height: 1.6;
 }
-.tituFoo{
-    font-size: 16px;
+#texFoo{
+    margin: 15px auto 30px;
+    width: 60%;
+    line-height: 1.5;
+}
+#texFoo span {
     font-weight: 600;
-    margin: auto;
-    margin-bottom: 30px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    width: 85%;
+}
+#texFoo a:link, #texFoo a:visited, #texFoo a:active{
+    color: #fff;
+}
+#footer .linea{
+    width: 60%;
+    margin: 30px auto;
+    border-bottom: 1px solid #fff;
+    position: relative;
+}
+#footer .linea::before{
+    content: '';
+    width: 70px;
+    height: 20px;
+    background-color: #325284;
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+#footer .linea::after{
+    content: '';
+    width: 35px;
+    height: 35px;
+    background-image: url('./solArgentina.svg');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    position: absolute;
+    top: -17px;
+    left: 50%;
+    transform: translateX(-50%);
+    /* margin: 0 12px; */
 }
 .nombre, .fuente{
     width: 80%;
     margin: 10px auto;
-}
-.nombre span{
+    font-size: 15px;
     font-weight: 600;
 }
-.nombre br, .fuente br{
-    display: none;
+.fuente{
+    font-size: 14px;
+    font-weight: 300;
 }
+.nombre span, .fuente span{
+    font-weight: 300;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+/* .nombre br, .fuente br{
+    display: none;
+} */
 .fuente a:link, .fuente a:visited, .fuente a:active{
     color: #fff;
 }

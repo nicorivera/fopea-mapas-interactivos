@@ -9,6 +9,9 @@
     }
 }
 @media (max-width: 1025px) {
+     #apertura{
+        background-image: url('./portadaTab.svg');
+    }
     .columna{
         width: 70%;
         margin: 50px auto 100px;
@@ -31,6 +34,11 @@
     }
     #cadena {
         width: 90%;
+    }
+}
+@media (max-width: 950px) {
+    #apertura{
+        background-position: 50%;
     }
 }
 @media (max-width: 900px) {
@@ -104,13 +112,18 @@
     #mapaRef{ 
         top: 130px;
     }
-
+    #footer .linea{
+        width: 80%;
+    }
+    #texFoo{
+        width: 80%;
+    }
 }
 @media (max-width: 600px) {
     #apertura{
         height: 80vh;
         margin-bottom: 300px;
-        background-image: url('./mapaHeadMob.jpg');
+        background-image: url('./portadaMob.svg');
     }
     #textAper{
         position: unset;
@@ -214,6 +227,9 @@
     }
 }
 @media (max-width: 500px) {
+    #apertura{
+        background-position: 0px -40px;
+    }
     h1{
         font-size: 50px;
     }
@@ -227,7 +243,6 @@
 }
 @media (max-width: 400px) {
     #apertura{
-        background-position: center -20px;
         margin-bottom: 200px;
     }
     h1 {
