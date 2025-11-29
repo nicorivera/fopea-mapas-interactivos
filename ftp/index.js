@@ -470,7 +470,9 @@ function createYacimientosLayer(yacJson, allPozos, allShapes) {
     });
 
     layer.on("click", (e) => {
-      hideTapa("cli");      
+      hideTapa("cli");
+      console.log('EEE', layer);
+      
       // Restaurar el que estaba seleccionado antes
       if (window.activeShapeYac && window.activeShapeYac !== layer) {
         window.activeShapeYac.setStyle({
@@ -579,9 +581,9 @@ function preparePozosClusters(pozJson) {
     const popup = `
       <b>Pozo:</b> ${pozoSigla}<br>
       <b>Yacimiento:</b> ${p.areayacimiento || "N/D"}<br>
-      <b>Empresa: <span style="color:${color}">${p.empresa || p.empresa_operadora || "N/D"}</span></b><br>
+      <b>Empresa:</b> <span style="color:${color}">${p.empresa || p.empresa_operadora || "N/D"}</span><br>
       <hr>
-      <b>Producción hasta 10/2025</b><br>
+      <b>Producción 2025:</b><br>
       <b>Petróleo:</b> ${numPet} m³<br>
       <b>Gas:</b> ${numGas} m³
       `;
@@ -668,9 +670,9 @@ function showPozosForYacimiento(yacName, pozos, shapes) {
     const popup = `
       <b>Pozo:</b> ${pozoSigla}<br>
       <b>Yacimiento:</b> ${p.areayacimiento || "N/D"}<br>
-      <b>Empresa: <span style="color:${color}">${p.empresa || p.empresa_operadora || "N/D"}</span></b><br>
+      <b>Empresa:</b> ${p.empresa || p.empresa_operadora || "N/D"}<br>
       <hr>
-      <b>Producción hasta 10/2025</b><br>
+      <b>Producción 2025:</b><br>
       <b>Petróleo:</b> ${numPet} m³<br>
       <b>Gas:</b> ${numGas} m³
     `;

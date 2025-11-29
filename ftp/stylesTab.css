@@ -98,9 +98,6 @@
         width: 100%; 
         margin: 5px auto;
     }
-    #numeros{
-        width: 90%;
-    }
 }
 @media (max-width: 800px) {
     #apertura{
@@ -137,7 +134,7 @@
         margin-right: auto;
     }
     #numeros{
-        width: 100%;
+        width: 95%;
     }
     #graficos{
         flex-direction: column;
@@ -225,19 +222,19 @@
     }
     #numeros{
         flex-direction: column;
-        width: 75%;
+        margin-top: -50px;
     }
     .numIzq, .numDer {
-        width: 75%;
-        min-height: unset;
-        margin: 20px auto;
+        width: 55%;
     }
-    /* .numIzq {
+    .numIzq {
         padding-bottom: 30px;
+        border-right: none;
+        border-bottom: 1px solid #000;
     }
     .numDer {
         padding-top: 30px;
-    } */
+    }
     .texNum {
         width: 100%;
     }
@@ -349,9 +346,6 @@
     }
     .actualizacion.leaflet-control {
         margin-bottom: 45px;
-    }
-    #numeros{
-        width: 100%;
     }
 }
 @media (max-width: 350px) {
