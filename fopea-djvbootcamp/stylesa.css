@@ -1,0 +1,533 @@
+/* Reset general */
+html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Zilla Slab', serif;
+    overflow-x: hidden;
+}
+#apertura{
+    position: relative;
+    width: 100%;
+    height: 90vh;
+    background-image: url('./portada.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 100px;
+}
+.divLogo{
+    margin: auto;
+    text-align: left;
+    width: 36%;
+    margin-right: 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.redes{
+    display: flex;
+    gap: 0 15px;
+}
+.redesFoo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0 35px;
+    margin: 20px auto;
+    margin-bottom: 50px;
+}
+.red{
+    width: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    vertical-align: middle;
+    margin: auto 5px;
+    position: relative;
+}
+.in, .w{
+    width: 22px;
+}
+.red:hover{
+    transform: scale(1.3);
+}
+#logoFopea{
+    width: 230px;
+    display: block;
+    margin: auto;
+    margin-left: 15px;
+}
+#logoFopeaFoo{
+    display: block;
+    width: 230px;
+    margin: auto;
+    margin-top: 20px;
+    margin-right: auto;
+}
+#textAper{
+    position: absolute;
+    right: 30px;
+    bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+}
+/* Titulo */
+h1{
+    text-align: right;
+    margin: auto;
+    margin-right: 25px;
+    color: #325284;
+    font-size: 72px;
+    font-weight: 600;
+}
+/* Subtitulo */
+h2{
+    font-size: 27px;
+    text-align: left;
+    margin: 0px auto;
+    margin-right: 20px;
+    background-color: #0178D6;
+    padding: 15px 20px;
+    color: white;
+    width: 32%;
+    font-family: "Roboto Flex", sans-serif;
+    font-weight: 400;
+}
+h2 span{
+    font-weight: 800;
+}
+/* Bajada */
+.bajada{
+    font-family: "Roboto Flex", sans-serif;
+    font-size: 18px;
+    text-align: left;
+    width: 32%;
+    margin: 10px auto 20px;
+    margin-right: 20px;
+    padding: 15px 20px;
+    background-color: #325284;
+    color: white;
+    line-height: 1.5;
+}
+/* Por Data Journalism Visualization Bootcamp */
+/* .por{
+    text-align: right;
+    font-size: 14px;
+    margin: 5px auto;
+    margin-right: 20px;
+    font-family: "Roboto Flex", sans-serif;
+    font-weight: 200;
+}
+.por span{
+    font-weight: 600;
+} */
+/* Titulos secciones */
+h3, #tituMapa{
+    text-align: center;
+    margin: 120px auto 50px;
+    font-size: 30px;
+}
+h3 br, h4 br{
+    display: none;
+}
+#tituMapa{
+    margin-bottom: 13px;
+}
+/* Imagen cronologia  */
+#crono{
+    width: 90%;
+    margin: auto;
+    display: block;
+}
+
+/* Aclaracion de graficos */
+.aclara{
+    text-align: center;
+    font-size: 19px;
+    margin: -40px auto 20px;
+    font-family: "Roboto Flex", sans-serif;
+    font-weight: 200;
+}
+/* Graficos de Petróleo y Gas */
+#graficos{
+    width: 53%;
+    margin: 70px auto 140px;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+#graficos .contGraf{
+    width: 100%;
+    margin: auto;
+    text-align: center;
+}
+#graficos h4{
+    font-size: 23px;
+    font-family: 'Zilla Slab', serif;
+    font-weight: 600;
+    text-align: center;
+    margin: auto auto 30px;
+}
+#graficos .graf{
+    width: 100%;
+    margin: auto 0;
+}
+/* Div contenedor de textos */
+.columna{
+    width: 50%;
+    margin: 50px auto 100px;
+}
+/* Textos generales */
+.tex{
+    font-size: 20px;
+    line-height: 1.6;
+    font-weight: 300;
+    letter-spacing: -0.1px;
+}
+.tex span{
+    font-weight: 600;
+}
+/* Primer letra de primer parrafo */
+#uno::first-letter {
+    font-size: 115px;
+    font-weight: 500;
+    float: left;
+    line-height: .8;
+    margin-right: 10px;
+    color: #0178D6;
+}
+/* Div contenedor de numeros destacados */
+#numeros{
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+    margin: 50px auto;
+    width: 100%;
+}
+/* Numeros destacados */
+.numIzq, .numDer{
+    width: 46%;
+    text-align: center;
+    margin: auto 1%;
+    justify-content: center;
+    padding: 0 20px;
+    border: 5px solid #CFE9F8;
+    min-height: 185px;
+}
+.numIzq{
+    /* border-right: 1px solid #000; */
+}
+.num{
+    font-size: 60px;
+    font-weight: 400;
+    font-family: "Roboto Flex", sans-serif;
+    margin: 10px auto;
+    color: #0178D6;
+}
+/* Textos de numeros destacados */
+.texNum{
+    width: 80%;
+    font-size: 18px;
+    line-height: 1.5;
+    font-family: "Roboto Flex", sans-serif;
+    margin: 10px auto 20px;
+    font-weight: 600;
+}
+.texNum span{
+    font-weight: 300;
+}
+/* Div contenedor de tipos de hidrocarburos */
+#tipos{
+    display: flex;
+    justify-content: space-around;
+    align-content: space-evenly;
+    margin: 50px auto 100px;
+    width: 50%;
+    gap: 0 20px;
+    font-family: "Roboto Flex", sans-serif;
+}
+#tipos .cuadro{
+    padding: 10px 20px;
+    box-sizing: border-box;
+    margin: 0 auto;
+    width: 50%;
+}
+#convencional{
+    background-color: #F0F0F0;
+}
+#noConvencional{
+    background-color: #CFE9F8;
+}
+#fracking{
+    width: 100%;
+    margin: 40px auto 80px;
+}
+
+#frackingSteps .step, #frackingStepsMob .stepMob{
+    font-family: "Roboto Flex", sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.5;
+}
+#frackingSteps .step span, #frackingStepsMob .stepMob span{
+    font-weight: 600;
+}
+#frackingStepsMob{
+    display: none;
+}
+.flourish-credit{
+    display: none;
+}
+iframe{
+    margin: 50px auto 0;
+}
+/* Titulos tipos hidrocarburos */
+#tipos .cuadro h4{
+    font-family: 'Zilla Slab', serif;
+    font-size: 27px;
+    text-align: center;
+    margin: 20px auto;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #000;
+    width: 100%;
+    font-weight: 600;
+}
+/* Lista punteada de caracteristicas */
+#tipos .cuadro ul{
+    display: flex;
+    align-content: space-between;
+    justify-content: space-between;
+    flex-direction: column;
+    padding-inline-start: 1.3em;
+    min-height: 635px;
+    list-style-type: none;
+}
+/* Caracteristicas */
+#tipos .cuadro ul li.texCuadro{
+    margin-bottom: 30px;
+    justify-items: flex-start;
+    align-items: flex-start;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.8;
+}
+#tipos .cuadro ul li.texCuadro:last-child{
+    min-height: fit-content;
+}
+#tipos .cuadro ul li.texCuadro span{
+    font-weight: 600;
+}
+#tipos .cuadro ul li .item{
+    width: 80px;
+    margin: auto;
+    display: block;
+}
+/* Div contenedor del pozo mas profundo */
+#prof{
+    width: 50%;
+    background-color: #CFE9F8;
+    margin: 50px auto 100px;
+    padding: 30px 20px 20px;
+}
+/* Titulo pozo mas profundo */
+#prof h3{
+    text-align: center;
+    margin: 10px auto 20px;
+}
+/* Texto pozo mas profundo */
+#prof .tex{
+    width: 90%;
+    margin: 20px auto;
+    text-align: left;
+}
+#prof #pozoProf{
+    margin: auto;
+    width: 100%;
+}
+/* Imagen cadena de valor  */
+#cadena{
+    width: 75%;
+    margin: auto;
+    display: block;
+}
+h4{
+    font-size: 27px;
+    font-family: 'Zilla Slab', serif;
+    font-weight: 600;
+    text-align: center;
+    margin: auto auto 40px;
+}
+/* Footer */
+#footer{
+    width: 100%;
+    background-color: #325284;
+    color: white;
+    padding: 20px 0px 50px;
+    text-align: center;
+    font-family: "Roboto Flex", sans-serif;
+    font-size: 14px;
+    font-weight: 200;
+    margin-top: 150px;
+    line-height: 1.6;
+}
+#texFoo{
+    margin: 15px auto 30px;
+    width: 50%;
+    line-height: 1.5;
+}
+#texFoo span {
+    font-weight: 600;
+}
+#texFoo a:link, #texFoo a:visited, #texFoo a:active{
+    color: #fff;
+    transition: all 0.3s ease;
+}
+#texFoo a:hover{
+    color: #9bd3fb;
+}
+#footer .linea{
+    width: 60%;
+    margin: 30px auto;
+    border-bottom: 1px solid #fff;
+    position: relative;
+}
+#footer .linea::before{
+    content: '';
+    width: 70px;
+    height: 20px;
+    background-color: #325284;
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+#footer .linea::after{
+    content: '';
+    width: 35px;
+    height: 35px;
+    background-image: url('./solArgentina.svg');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    position: absolute;
+    top: -17px;
+    left: 50%;
+    transform: translateX(-50%);
+    /* margin: 0 12px; */
+}
+.nombre, .fuente{
+    width: 80%;
+    margin: 10px auto;
+    font-size: 15px;
+    font-weight: 600;
+}
+.fuente{
+    font-size: 14px;
+    font-weight: 300;
+}
+.nombre span, .fuente span{
+    font-weight: 300;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+/* .nombre br, .fuente br{
+    display: none;
+} */
+.fuente a:link, .fuente a:visited, .fuente a:active{
+    color: #fff;
+    transition: all 0.3s ease;
+}
+.fuente a:hover{
+    color: #9bd3fb;
+}
+#copy{
+    font-size: 11px;
+    font-weight: 300;
+    margin-top: 30px;
+    letter-spacing: 0.5px;
+}
+/* .blanco{
+    stroke: #ffffff !important;
+    fill: #ffffff !important;
+} */
+
+/* Estilos mapa interactivo */
+#map { width:95%; height:100vh; margin: 0 auto 100px; padding:0; position: relative;}
+#tapa { width:100%; height: 95vh;margin: auto; pointer-events: none; padding:0; background-color: transparent;z-index: 10000000; position: absolute; top: 80px;}
+#mapaRef{ width: 70px; height: 130px; z-index: 1000000; position: absolute; right: 10px; top: 95px;}
+.legend { width:100%;height:60px;float: none!important; background:white; padding:8px; padding-bottom: 13px; border-radius:3px; box-shadow:none; font-size:13px; text-align: center;margin: 50px auto;position: absolute;left: 50%!important;transform: translateX(-50%)!important;top: -13px!important; }
+.legend label { display:inline-block; vertical-align:middle; margin: 0 20px; font-weight:200;text-transform: uppercase;letter-spacing: 0.5px;}
+.legend .sw { display:inline-block; width:14px; height:14px; margin-right:6px; margin-left: -5px; border-radius:50%; vertical-align:middle; }
+.btn { cursor: pointer; vertical-align: middle; transition: all 0.3s ease; background-color:#fff; width: fit-content; border: 1px solid #000; padding:5px 10px; border-radius:3px; margin: 0px 10px; display:inline-block; text-decoration:none; }
+.btn:hover { background-color:#000; color:#fff; }
+.leaflet-top.leaflet-right{width: 100%;margin: auto;}
+.leaflet-top.leaflet-left{z-index: 1001; top: 80px;}
+#refes{
+    /* width: 150px; */
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-left: 20px;
+}
+#refes p{
+    font-size: 11px;
+    font-weight: 400;
+    margin: 0 5px;
+    letter-spacing: 1px;
+}
+#refes p span{
+    font-size: 15px;
+}
+.refContainer{
+    width: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px 0;
+    margin: 10px auto;
+}
+.refYPF, .refArg, .refExt{
+    width: 100%;
+    height: 7px;
+    margin: auto;
+    background: linear-gradient(to right, #0178D6, white);
+}
+.refArg{
+    background: linear-gradient(to right, #9BBCDC, white);
+}
+.refExt{
+    background: linear-gradient(to right, #F4785E, white);
+}
+#filtros, #filtrosMob {width: 100%; display: flex; flex-wrap: wrap; margin: 15px auto; justify-content: center; align-items: center; }
+#btnReset { font-weight:bold; }
+#chkYPF,#chkARG,#chkEXT{background-color: #fff; vertical-align: middle;}
+#chkYPF::before, #chkYPF:hover{background-color: #0178D6 !important;}
+#chkARG::before, #chkARG:hover{background-color: #9BBCDC !important;}
+#chkEXT::before, #chkEXT:hover{background-color: #F4785E !important;}
+input[type="checkbox"] {-webkit-appearance: none;appearance: none;background-color: transparent;margin: 0;width: 2px;height: 16px;transform: translateY(-0.075em);position: relative;}
+input[type="checkbox"]::before {content: "";width: 1px;height: 11px;transition: 0.3s all ease;position: absolute;top: 2px;left: 1px;}
+input[type="checkbox"]:checked::before {background-color: transparent;}
+.leaflet-container a { color: #000; font-size: 10px;}
+.bot { cursor: pointer;vertical-align: middle; transition: all 0.3s ease; background:#fff; width: fit-content; border: 0.5px solid #000; padding:5px 10px; border-radius:3px; margin: 0px 10px; display:inline-block; text-decoration:none; color:#000; font-weight:600; }
+.filtro-btn { position: relative; border:1px solid #000; cursor: pointer; border-radius:4px; padding:5px 10px 5px 20px; margin:0px 10px; transition: all 0.2s ease; }
+.filtro-btn::before {content: "";width: 10px;height: 10px;border-radius: 50%; transition: 0.3s all ease;position: absolute;top: 7px;left: 7px;}
+.btn.filtro-btn.no { background-color:#fff !important; }
+.filtro-btn.active { color:#fff; }
+.filtro-btn:hover { background-color:#000; color:#fff; }
+.leaflet-interactive:focus { outline-color: transparent; outline-style: none;}
+.leaflet-interactive.no { opacity:0;}
+.leaflet-interactive:focus {
+    outline: none !important;
+}
+.leaflet-interactive:focus-visible {
+    outline: none !important;
+}
+svg path:focus {
+    stroke: none !important;
+    stroke-width: 0 !important;
+}
+.actualizacion.leaflet-control{
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
