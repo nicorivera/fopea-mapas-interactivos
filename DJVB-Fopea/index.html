@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DJV Bootcamp FOPEA - Vaca Muerta, el motor energético de la Argentina</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="stylese.css" />
+    <link rel="stylesheet" href="stylesTabe.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+</head>
+<body>
+    <div id="apertura">
+        <div id="textAper">
+            <h1>VACA MUERTA</h1>
+            <h2>El motor energético de la Argentina</h2>
+            <p class="bajada">La extracción de hidrocarburos de la Cuenca Neuquina se aceleró desde 2020. Esta producción presenta datos esenciales sobre un recurso natural con un potencial exportador que compite con el agro.</p>
+            <div class="divLogo">
+                <img id="logoFopea" src="./logo-FOPEA_DJVBOOTCAMP.svg" alt="Logo de FOPEA DJV Bootcamp">
+                <div class="redes">
+                    <a class="linkRed" href="https://web.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvacamuertamotorargentino.fopea.org&_rdc=1&_rdr#" target="_blank"><img src="./redes/Fb.svg" alt="Facebook" class="red f"></a>
+                    <a class="linkRed" href="https://x.com/intent/post?url=https%3A%2F%2Fvacamuertamotorargentino.fopea.org&text=Vaca%20Muerta%20motor%20argentino" target="_blank"><img src="./redes/Xb.svg" alt="X" class="red x"></a>
+                    <a class="linkRed" href="https://api.whatsapp.com/send/?text=Vaca+Muerta+motor+argentino+https%3A%2F%2Fvacamuertamotorargentino.fopea.org&type=custom_url&app_absent=0" target="_blank"><img src="./redes/Wb.svg" alt="Whatsapp" class="red w"></a>
+                    <a class="linkRed" href="https://www.linkedin.com/feed/?shareActive=true&shareUrl=https%3A%2F%2Fvacamuertamotorargentino.fopea.org" target="_blank"><img src="./redes/inb.svg" alt="LinkedIn" class="red in"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="columna">
+        <p class="fecha">Argentina, 10 de diciembre de 2025</p>
+        <p class="tex" id="uno">Las reservas de gas y de petróleo existentes en <span>Vaca Muerta</span> alcanzan para modificar la matriz agroexportadora de la economía argentina. Ese giro energético ya está en marcha impulsado por las inversiones cuantiosas en infraestructura.</p>
+        <p class="tex">¿Cuánto se sabe en general acerca del cambio? Esta producción del <span>Data Journalism Visualization Bootcamp/FOPEA</span> presenta datos de interés público imprescindibles para dimensionar el boom de los hidrocarburos de la <span>Cuenca Neuquina</span>, como información geolocalizada de <span>73 yacimientos no convencionales</span> y <span>3.741 pozos activos</span>.</p>
+
+        <h3>¿Qué es Vaca Muerta?</h3>
+        <p class="tex"> Vaca Muerta no es un lugar, sino una formación geológica de <span>shale</span> o esquisto, un tipo de roca sedimentaria, con una superficie total aproximada de entre <span>30.000 y 36.000 kilómetros cuadrados</span> ubicada a <span>3.000 metros de profundidad</span>, que cubre parte de las provincias argentinas de <span>Neuquén</span> (donde se encuentra su mayor área), <span>Río Negro</span>, <span>La Pampa</span> y <span>Mendoza</span>. En términos comparativos, la extensión de este recurso natural supera el territorio de Misiones (29.801 km²).</p>
+        <p class="tex">Vaca Muerta nutre la <span>Cuenca Neuquina</span>, una de las cinco cuencas productoras de hidrocarburos de la Argentina. Tiene la particularidad de ser la única formación de shale (o esquisto), una clase de material sólido en la que el gas y el petróleo no se almacenan en un reservorio, sino que la extracción se ejecuta directamente desde los sedimentos de la roca madre.</p>
+        <p class="tex">En la producción convencional de gas y petróleo que imperó en el país hasta el año 2020, y que tuvo su auge en la década de 1990, los recursos proceden de depósitos con porosidad y permeabilidad relativamente buenas, de modo que los fluidos circulan con facilidad hacia los pozos y se extraen con la técnica tradicional de la perforación vertical.</p>
+        <p class="tex">El shale precisa de una extracción <span>no convencional</span> porque los hidrocarburos se alojan en rocas con baja permeabilidad o muy compactas, donde no fluyen con facilidad. Para retirarlos, se aplica una técnica de desarrollo moderno conocida como <span>fractura hidráulica (fracking)</span>, <span>que consiste en la perforación horizontal con muchas etapas o punciones sobre la roca.</span></p>
+    </div>
+
+    <h3>Cronología del descubrimiento <br> y la explotación</h3>
+    <img id="crono" src="cronologia.jpg" alt="">
+    <p class="ref">FUENTE: <a href="https://www.argentina.gob.ar/economia" target="_blank">Ministerio de Economía de la Nación</a>.</p>
+
+    <h3>¿De quién es Vaca Muerta?</h3>
+    <div class="columna">
+        <p class="tex">La formación geológica de <span>Vaca Muerta</span> se rige por la <span>Ley 17.319 de Hidrocarburos</span>, promulgada en 1967, que establece que los yacimientos de hidrocarburos líquidos y gaseosos situados en el territorio de la República Argentina y en su plataforma continental pertenecen al patrimonio inalienable e imprescriptible del Estado Nacional.</p>
+        <p class="tex">Esta normativa fue modificada por la <span><a href="https://servicios.infoleg.gob.ar/infolegInternet/anexos/120000-124999/123780/norma.htm" target="_blank">Ley 26.197</a></span>, promulgada en 2006, que transfirió la administración plena de los yacimientos a las provincias.</p>
+        <p class="tex">De esta manera, son las provincias las que administran y concesionan las áreas para la extracción de hidrocarburos, y las que reciben el cobro de las regalías. En <span>Neuquén</span>, el canon de regalías tiene una escala de entre el <span>12% y el 18%, según la concesión, del total de la extracción.</span></p>
+        <p class="tex">En 2025, los ingresos por regalías representaron la mitad de los gastos del Estado neuquino.</p>
+    </div>
+
+    <h3>¿Cuál es la importancia económica de Vaca Muerta?</h3>
+    <div class="columna">
+        <p class="tex">La expansión de la producción en Vaca Muerta tuvo un impacto profundo en la economía local y nacional, con un crecimiento sostenido en la producción de gas y petróleo.</p>
+        <p class="tex">En los primeros 10 meses de 2025,<span> la Argentina logró un superávit energético de US$ 6.067 millones, US$ 1.745 millones </span> más que en el mismo período del año anterior, según la Secretaría de Energía de la República Argentina. Estos resultados fueron los mejores de los <a href="https://www.lanacion.com.ar/economia/la-balanza-comercial-energetica-tuvo-su-mayor-superavit-en-35-anos-nid11092025/" target="_blank">últimos 35 años</a>.</p>
+        <div id="numeros">
+            <div class="numIzq">
+                <p class="num">4º</p>
+                <p class="texNum">Reserva de petróleo no convencional <span>en el mundo</span></p>
+            </div>
+            <div class="numDer">
+                <p class="num">2º</p>
+                <p class="texNum">Reserva de gas natural no convencional <span>en el mundo</span></p>
+            </div>
+        </div>
+        <p class="tex">En octubre de 2025, la diferencia entre exportaciones e importaciones energéticas fue de <span> US$ 708 millones, lo que representa el 88,5% de la balanza comercial de toda la economía argentina que ascendió a los US$ 800 millones.</span> En aquel mes, el superávit de la balanza comercial energética tuvo su impulso en la producción récord de petróleo del país con <span> barriles por día, nivel que supera la marca histórica de mayo de 1998 </span>, cuando se extrajeron 858.329 barriles diarios. <span> Muerta aportó 587.190 mil barriles por día, el 68,3% del total, de los cuales el 96,7% fue petróleo no convencional (567.802 barriles diarios).</span></p>
+    </div>
+
+    <h3>Convencional versus <br>No convencional</h3>
+    <div id="tipos">
+        <div class="cuadro" id="convencional">
+            <h4>Convencional</h4>
+            <ul>
+                <li class="texCuadro"><img class="item" src="./Item1_Convencional.svg" /><p>Son aquellos recursos de hidrocarburos que están en reservorios con porosidad y permeabilidad relativamente buenas, de modo tal que los fluidos (petróleo y gas) circulan con facilidad hacia los pozos. Son más difíciles de encontrar, por lo que tienen un alto riesgo exploratorio.</p></li>
+                <li class="texCuadro"><img class="item" src="./Item2_Convencional.svg" /><p>En general se extraen con técnicas “tradicionales”: perforaciones verticales (o ligeramente desviadas) y bombeo que aprovechan la presión natural del reservorio, sin necesidad de fracturas hidráulicas masivas o de pozos horizontales largos.</p></li>
+                <li class="texCuadro"><img class="item" src="./Item3_Convencional.svg" /><p>Costos, productividad y rentabilidad: la actividad convencional tiene una baja productividad en la Argentina. Con un precio del barril de petróleo cercano a los US$ 65, y costos de entre los US$ 45 y los US$ 60, según los datos de las operadoras, su rentabilidad es baja.</p></li>
+            </ul>
+        </div>
+        <div class="cuadro" id="noConvencional">
+            <h4>No convencional</h4>
+            <ul>
+                <li class="texCuadro"><img class="item" src="./Item1_NoConvencional2.svg" /><p>Incluyen shale oil,  shale gas, tight oil, tight gas, arenas bituminosas, etcétera. Se trata de rocas con baja permeabilidad o muy compactas, donde el hidrocarburo no fluye con facilidad. El riesgo exploratorio es menor: son más sencillos de ubicar.</p></li>
+                <li class="texCuadro"><img class="item" src="./Item2_NoConvencional.svg" /><p>Requieren tecnologías más complejas: fracking (fractura hidráulica); perforaciones horizontales; muchas etapas de estimulación del reservorio; mayor inversión en infraestructura, y manejo más intensivo del agua y de los químicos.</p></li>
+                <li class="texCuadro"><img class="item" src="./Item3_NoConvencional.svg" /><p>Costos, productividad y rentabilidad: el gran volumen de reservas hace que la producción no convencional tenga altos niveles de productividad. Con el precio del barril de petróleo cercano a los US$ 65, y costos de producción situados entre US$ 35 y 45, su rentabilidad es significativa. </p></li>
+            </ul>
+        </div>
+    </div>
+    <p class="ref med">FUENTE: <a href="https://iade.org.ar/" target="_blank">Instituto Argentino para el Desarrollo Económico</a>.</p>
+    <h3>¿Qué es el fracking?</h3>
+    <div class="columna">
+        <p class="tex">Para el desarrollo de los hidrocarburos no convencionales fue fundamental la técnica de la fractura hidráulica o fracking, que comenzó a implementarse a finales del siglo XIX en la costa Este de los Estados Unidos. Desde allí se expandió lentamente por todo el territorio, hasta encontrar su base principal en la Cuenca de Permian, en Houston, Texas. Este polo de hidrocarburos convirtió al país en uno de los principales productores de gas y petróleo del mundo. </p>
+        <p class="tex">La confirmación de las reservas de esquisto en Vaca Muerta, en 2012, implicó un renacimiento para la industria de la Argentina. Mientras el método convencional agotaba sus recursos, el fracking posibilitó el aprovechamiento de la Cuenca Neuquina. Esto sucedió entre observaciones e <a href="https://www.greenpeace.org/mexico/blog/61458/fracking-danino-cambio-climatico/" target="_blank">interrogantes sobre su impacto ambiental</a>. El modelo no convencional se impuso, y, desde entonces, el país es uno de los principales jugadores del tablero global de petróleo y gas. </p>
+        <p class="tex">El fracking es una técnica de extracción de hidrocarburos que permite retirar grandes cantidades de gas y petróleo desde el subsuelo de rocas porosas mediante una rama horizontal. Requiere de la perforación de un pozo con un ducto vertical y, luego, de uno horizontal que, mediante la inyección de agua, arena y otros fluidos, extraen los hidrocarburos. </p>
+        <div id="frackingSteps">
+            <div
+                class="flourish-embed"
+                data-src="story/3473043"
+                data-url="https://flo.uri.sh/story/3473043/embed"
+                data-height="100vh"
+            >
+                <h4 class="tituFrack">Proceso de extracción de hidrocarburos</h4>
+                <script src="https://public.flourish.studio/resources/embed.js"></script>
+            </div>
+            <p class="step"><span>Cementación</span><br>Se colocan tubos de acero especial de diferentes diámetros.
+                <a href="#story/3473043/slide-1"></a>
+            </p>
+            <p class="step"><span>Cementación</span><br>Se inyecta cemento a presión desde la superficie.
+                <a href="#story/3473043/slide-2"></a>
+            </p>
+            <p class="step"><span>Cementación</span><br>Esto permite aislar las diferentes capas de roca y proteger el acuífero subterráneo.
+                <a href="#story/3473043/slide-3"></a>
+            </p>
+
+            <p class="step"><span>Perforación</span><br>Es generada con disparos de cargas. Las fracturas tienen una longitud de entre <span>150 y 300 metros</span> y su espesor no supera <span>1 cm de diámetro</span>.
+                <a href="#story/3473043/slide-4"></a>
+            </p>
+
+            <p class="step"><span>Fluido de fractura</span><br>Este fluido está formado por <span>95% de agua no potable, 4,5% arena, &lt; 1% aditivos químicos</span>. Se bombea desde la superficie a alta presión. 
+                <a href="#story/3473043/slide-5"></a>
+            </p>
+
+            <p class="step"><span>Taponado para producción</span><br>Se colocan tapones de aislamiento y se repite el procedimiento.
+                <a href="#story/3473043/slide-6"></a>
+            </p>
+            <p class="step"><span>Producción</span><br>Comienza al retirar los tapones, y el gas y el petróleo suben a la superficie.
+                <a href="#story/3473043/slide-7"></a>
+            </p>
+            <p class="step"><span>Tratamiento de hidrocarburos</span><br>Son separados en separadores trifásicos. El gas se envía a tratamiento por gasoductos, y el petróleo se envía a refinación por tuberías o contenedores.
+                <a href="#story/3473043/slide-8"></a>
+            </p>
+        </div>
+        <div id="frackingStepsMob">
+            <div
+            class="flourish-embed"
+            data-src="story/3481989"
+            data-url="https://flo.uri.sh/story/3481989/embed"
+            data-height="60vh"
+            >
+            <h4 class="tituFrack">Proceso de extracción de hidrocarburos</h4>
+                <script src="https://public.flourish.studio/resources/embed.js"></script>
+            </div>
+            <p class="stepMob"><span>Cementación</span><br>Se colocan tubos de acero especial de diferentes diámetros.
+                <a href="#story/3481989/slide-1"></a>
+            </p>
+            <p class="stepMob"><span>Cementación</span><br>Se inyecta cemento a presión desde la superficie.
+                <a href="#story/3481989/slide-2"></a>
+            </p>
+            <p class="stepMob"><span>Cementación</span><br>Esto permite aislar las diferentes capas de roca y proteger el acuífero subterráneo.
+                <a href="#story/3481989/slide-3"></a>
+            </p>
+
+            <p class="stepMob"><span>Perforación</span><br>Es generada con disparos de cargas. Las fracturas tienen una longitud de entre <span>150 y 300 metros</span> y su espesor no supera <span>1 cm de diámetro</span>.
+                <a href="#story/3481989/slide-4"></a>
+            </p>
+
+            <p class="stepMob"><span>Fluido de fractura</span><br>Este fluido está formado por <span>95% de agua no potable, 4,5% arena, &lt; 1% aditivos químicos</span>. Se bombea desde la superficie a alta presión. 
+                <a href="#story/3481989/slide-5"></a>
+            </p>
+
+            <p class="stepMob"><span>Taponado para producción</span><br>Se colocan tapones de aislamiento y se repite el procedimiento.
+                <a href="#story/3481989/slide-6"></a>
+            </p>
+            <p class="stepMob"><span>Producción</span><br>Comienza al retirar los tapones, y el gas y el petróleo suben a la superficie.
+                <a href="#story/3481989/slide-7"></a>
+            </p>
+            <p class="stepMob"><span>Tratamiento de hidrocarburos</span><br>Son separados en separadores trifásicos. El gas se envía a tratamiento por gasoductos, y el petróleo se envía a refinación por tuberías o contenedores.
+                <a href="#story/3481989/slide-8"></a>
+            </p>
+        </div>
+        <p class="tex">El fracking presenta costos mayores que la técnica convencional, con casi el 50% más de inversión. Mientras que un pozo convencional requiere en promedio de entre <a href="https://vacamuerta.ar/cuanto-cuesta-un-pozo-en-vaca-muerta-y-a-que-valor-es-rentable/" target="_blank">US$ 8 y 12 millones de inversión inicial</a>, la fractura hidráulica demanda hasta US$ 18 millones por pozo, en función  de la profundidad y de la fase. <span> 2025 se invirtieron US$ 11.500 millones en Vaca Muerta </span>, según lo informado a la Secretaría de Energía por las propias compañías.</p>
+        <p class="tex">Pero la rentabilidad del fracking también es mayor por una serie de factores: permite extraer mayores cantidades de hidrocarburos en un periodo más extenso de tiempo, gracias a la capacidad de generar más pozos en una rama de perforación, y a que el 80% del material extraído es gas o petróleo, y el 20% restante, fluidos utilizados en el proceso, mientras que el producto de la técnica convencional invierte aquella proporción.</p>
+    </div>
+    <h3 id="tituMapa">Todos los yacimientos no convencionales de Vaca Muerta</h3>
+    <div id="map">
+        <div id="tapa"></div>
+        <img id="mapaRef" src="./Argentina-mapa.svg" alt="">
+    </div>
+    <p class="ref">FUENTE: <a href="https://www.argentina.gob.ar/economia/energia" target="_blank">Secretaría de Energía de la Nación</a>.</p>
+    <h3>Los números de la <br> producción no convencional</h3>
+    <p class="aclara">Cifras en millones de metros cúbicos <br>hasta octubre de 2025</p>
+    <div id="graficos">
+        <div class="contGraf">
+            <h4>Petróleo</h4>
+            <img class="graf" src="./petroleob.svg" alt="">
+        </div>
+        <div class="contGraf">
+            <h4>Gas</h4>
+            <img class="graf" src="./gasb.svg" alt="">
+        </div>
+    </div>
+    <p class="ref med">FUENTE: <a href="https://www.argentina.gob.ar/economia/energia" target="_blank">Secretaría de Energía de la Nación</a>.</p>
+
+    <div id="prof">
+        <h3>El pozo más profundo</h3>
+        <p class="tex">Hasta el momento, el pozo con la rama lateral más larga en <span>Vaca Muerta es LC SOil-476 (h) del yacimiento Loma Campana de YPF</span> y que alcanzó 5114 metros horizontales, un poco más que la extensión de la línea A de subterráneos entre sus estaciones Plaza de Mayo y Puán. En total se trata de 8376 caños a más de 3200 metros de profundidad.</p>
+        <img id="pozoProf" src="./pozoProf.svg" alt="">
+        <p class="ref med">FUENTE: <a href="https://desafiovacamuerta.ypf.com/" target="_blank">YPF</a>.</p>
+    </div>
+    <h3>Cadena de valor <br> de petróleo y gas</h3>
+    <div class="columna ch">
+        <p class="tex">La cadena de valor de Vaca Muerta se compone de <span><a href="https://copas.org/understanding-upstream-midstream-and-downstream-oil-and-gas-activities/" target="_blank">tres etapas</a></span>: <span>upstream</span>, la fase inicial del proceso que comprende la exploración, extracción y producción de materias primas; <span> midstream</span>, que engloba el transporte y el almacenamiento de estas materias primas, y el <span>downstream</span>, la etapa de refinación y comercialización.</p>
+        <p class="tex">En el <span>upstream</span>, tanto el petróleo como el gas no convencional comparten los procesos de exploración y explotación. En esta etapa se identifican formaciones geológicas con potencial, como las <a href="https://glossary.slb.com/es/terms/s/shale" target="_blank">lutitas</a>, y se utilizan técnicas como <span>la perforación horizontal y la fracturación hidráulica</span> para liberar los hidrocarburos atrapados en la roca.</p>
+        <p class="tex">En el <span>midstream</span>, el gas y el petróleo requieren transporte desde el sitio de extracción hasta las plantas de procesamiento, pero aquí comienzan a diferenciarse. El petróleo se traslada mediante oleoductos o camiones cisterna hacia las refinerías mientras que el gas natural se mueve a través de gasoductos o como gas natural licuado (GNL) hacia plantas donde se deshidrata, se eliminan impurezas y se separan los líquidos.</p>
+        <p class="tex">En el <span>downstream</span>, el petróleo es <span>refinado para producir combustibles</span> como gasolina, diésel o queroseno, que luego se distribuyen y comercializan en mercados locales e internacionales. Por su parte, el gas es procesado para separar componentes como metano, etano o propano, y se comercializa para uso industrial, generación eléctrica o exportación.</p>
+    </div>
+    <img id="cadena" src="./cadenaDesk.svg" alt="">
+    <p class="ref med">FUENTE: <a href="https://copas.org/" target="_blank">Council of Petroleum Accountants Societies</a>.</p>
+    <h3>Vaca Muerta, guía del rumbo productivo del país</h3>
+    <div class="columna">
+        <p class="tex">El crecimiento sostenido de la producción de gas y petróleo en Vaca Muerta no solo garantizará el autoabastecimiento sino que convertirá al país en una potencia exportadora. Se trata de <a href="https://www.bcr.com.ar/es/mercados/investigacion-y-desarrollo/informativo-semanal/noticias-informativo-semanal/se-proyecta-0" target="_blank">una proyección</a> que estimula la llegada de capitales a gran escala y el establecimiento de empresas al amparo de mecanismos como el Régimen de Incentivos para Grandes Inversiones (<a href="https://www.argentina.gob.ar/noticias/rigi-desde-hoy-las-empresas-podran-aplicar-al-regimen" target="_blank">RIGI</a>, 2024).</p>
+        <p class="tex">En diciembre de 2019, Neuquén se consolidó como la provincia que más hidrocarburos generó en el país al superar a Chubut, y, desde entonces, de la mano de Vaca Muerta, comenzó a marcar el horizonte productivo del petróleo y del gas. </p>
+        <p class="tex">En el próximo lustro se espera que las exportaciones derivadas de los hidrocarburos de Vaca Muerta, el GNL y el crudo ronden <span> US$ 40 mil millones, lo que implicaría dejar definitivamente atrás el volumen de divisas que genera el agro.</span> El Banco Central de la República Argentina estima que hacia 2030 la energía será la principal fuente de dólares, y el motor que permitirá pasar de exportaciones totales de bienes por <span>$ 89.500 millones en 2024 (15,4% del producto bruto interno) hasta los US$ 143.800 millones en 2030 (17,8% del PIB).</span> Estas previsiones alimentan el boom de Vaca Muerta, que corre una carrera contra el reloj de la crisis climática y la presión para que los hidrocarburos sean sustituidos por las energías renovables. </p>
+    </div>
+    <div id="footer">
+        <div class="redesFoo">
+            <a class="linkRedFoo" href="https://web.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fvacamuertamotorargentino.fopea.org&_rdc=1&_rdr#" target="_blank"><img src="./redes/F.svg" alt="Facebook" class="red f"></a>
+            <a class="linkRedFoo" href="https://x.com/intent/post?url=https%3A%2F%2Fvacamuertamotorargentino.fopea.org&text=Vaca%20Muerta%20motor%20argentino" target="_blank"><img src="./redes/X.svg" alt="X" class="red x"></a>
+            <a class="linkRedFoo" href="https://api.whatsapp.com/send/?text=Vaca+Muerta+motor+argentino+https%3A%2F%2Fvacamuertamotorargentino.fopea.org&type=custom_url&app_absent=0" target="_blank"><img src="./redes/W.svg" alt="Whatsapp" class="red w"></a>
+            <a class="linkRedFoo" href="https://www.linkedin.com/feed/?shareActive=true&shareUrl=https%3A%2F%2Fvacamuertamotorargentino.fopea.org" target="_blank"><img src="./redes/in.svg" alt="LinkedIn" class="red in"></a>
+        </div>
+        <img id="logoFopeaFoo" src="./logo-FOPEA_DJVBOOTCAMP_blanco.svg" alt="Logo de FOPEA DJV Bootcamp">
+        <p id="texFoo">Esta visualización de una investigación periodística basada en datos fue elaborada durante el segundo semestre de 2025 en el ámbito de <span>Data Journalism Visualization Bootcamp del <a class="linkFoo" href="https://fopea.org/" target="_blank">Foro de Periodismo Argentino</a></span>. <br>El programa recibió el apoyo de la <span>Embajada de Suiza en la Argentina</span>. <br><span>Contacto:</span> <a class="linkFoo" href="mailto:fopea@fopea.org">fopea@fopea.org</a></p>
+        <div class="linea"></div>
+        <p class="nombre"><span>Investigación periodística</span> <br>Martín Castro</p>
+        <p class="nombre"><span>Producción periodística</span> <br>Martín Castro - Silvina Chang</p>
+        <p class="nombre"><span>Diseño</span> <br>Catalina Magnetti</p>
+        <p class="nombre"><span>Programación y análisis de datos</span> <br>Nicolás Rivera - Cynthia Figueroa</p>
+        <p class="nombre"><span>Mentoría</span> <br>Mariana Trigo Viera</p>
+        <p class="nombre"><span>Liderazgo de DJV Bootcamp</span> <br>Irene Benito</p>
+        <p class="nombre"><span>Supervisión de FOPEA</span> <br>Amelia Corazza (directora ejecutiva) - Paula Moreno Román (secretaria)</p>
+        <p class="nombre"><span>Coordinación de comunicación</span> <br>Sol Clemente</p>
+        <p class="fuente"><span>Fuentes</span><br>
+            <a class="linkFoo" href="http://datos.energia.gob.ar/dataset" target="_blank">Secretaría de Energía de la Nación</a>, <br>
+            <a class="linkFoo" href="https://www.argentina.gob.ar/economia" target="_blank">Ministerio de Economía de la Nación</a>, <br>
+            <a class="linkFoo" href="https://iapg.org.ar/" target="_blank">Instituto Argentino de Petróleo y Gas (IAPG)</a>, <br>
+            <a class="linkFoo" href="https://desafiovacamuerta.ypf.com/" target="_blank">YPF</a>, <br>
+            <a class="linkFoo" href="https://iade.org.ar/" target="_blank">Instituto Argentino para el Desarrollo Económico</a>, <br>
+            <a class="linkFoo" href="https://servicios.infoleg.gob.ar/infolegInternet/anexos/120000-124999/123780/norma.htm" target="_blank">Ley 26.197 Hidrocarburos</a>, <br>
+            <a class="linkFoo" href="https://copas.org/" target="_blank">Council of Petroleum Accountants Societies</a>, <br>
+            <a class="linkFoo" href="https://www.greenpeace.org/global/" target="_blank">Greenpeace</a>, <br>
+            <a class="linkFoo" href="https://www.bcra.gob.ar/" target="_blank">Banco Central de la República Argentina</a>
+        </p>
+        <p id="copy">Copyright © 2025 - Todos los derechos reservados</p>
+    </div>
+    <script src="https://cdn.flourish.rocks/flourish-scrolly-v3.1.0.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+    <script src="indexe.js"></script>
+    <script type="text/javascript">initFlourishScrolly()</script>
+</body>
+</html>

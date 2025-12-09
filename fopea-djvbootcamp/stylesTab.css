@@ -12,21 +12,19 @@
         width: 55%;
     }
 }
-/* @media (min-width: 1650px) {
-    #crono {
-        width: 75%;
-        margin: auto;
-        display: block;
+@media (min-width: 2500px) {
+    #tipos .cuadro ul {
+        min-height: 375px;
     }
-} */
+}
 @media (min-width: 1470px) {
     #tipos .cuadro ul{
         min-height: 460px;
     }
 }
-@media (min-width: 2500px) {
-    #tipos .cuadro ul {
-        min-height: 375px;
+@media (max-width: 1200px) {
+    .numIzq, .numDer{
+        min-height: 220px;
     }
 }
 @media (max-width: 1150px) {
@@ -180,6 +178,17 @@
     #texFoo{
         width: 80%;
     }
+    .columna .tex{
+        z-index: 20;
+    }
+    #frackingSteps{
+        display: none;
+    }
+    #frackingStepsMob{
+        z-index: -1;
+        display: block;
+        margin-bottom: -30px;
+    }
 }
 @media (max-width: 600px) {
     #apertura{
@@ -262,7 +271,7 @@
         width: 95%;
     }
     #prof {
-        width: 9%;
+        width: 90%;
         padding: 30px 10px 20px;
     }
     #prof #pozoProf {
@@ -302,6 +311,9 @@
     .filtro-btn {
         margin: 5px 10px;
     }
+    #frackingStepsMob .stepMob{
+        width: 85% !important;
+    }
 }
 @media (max-width: 500px) {
     #apertura{
@@ -332,7 +344,7 @@
         padding: 30px 0;
     }
     #prof {
-        width: 80%;
+        width: 100%;
     }
     #prof #pozoProf {
         margin-left: -7%;

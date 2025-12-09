@@ -1,0 +1,522 @@
+@media (min-width: 2300px) {
+    #textAper{
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 30px;
+        max-width: 1200px;
+    }
+    #tipos .cuadro ul {
+        min-height: 375px;
+    }
+}
+@media (min-width: 1800px) {
+    #textAper{
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: 1200px;
+    }
+    h2, .bajada{
+        width: 50%;
+    }
+    .divLogo{
+        width: 57%;
+    }
+    #crono {
+        margin: auto;
+        display: block;
+    }
+    .ref{
+        max-width: 1200px;
+        margin: auto;
+    }
+    #prof {
+        text-align: center;
+    }
+    #prof #pozoProf {
+        margin: auto;
+        width: 100%;
+    }
+    #cadena{
+        max-width: 1200px;
+    }
+    #texFoo{
+        max-width: 1000px;
+    }
+    #footer .linea {
+        max-width: 1000px;
+    }
+}
+
+@media (min-width: 1470px) {
+    #tipos .cuadro ul{
+        min-height: 460px;
+    }
+}
+@media (max-width: 1200px) {
+    .numIzq, .numDer{
+        min-height: 220px;
+    }
+    h2{
+        width: 42%;
+    }
+    .bajada{
+        width: 42%;
+    }
+    .divLogo{
+        width: 47%;
+    }
+}
+@media (max-width: 1150px) {
+    .refContainer {
+        width: 70px;
+    }
+    .legend {
+        width: 100%;
+        height: 90px;
+    }
+    #mapaRef {
+        top: 120px;
+    }
+    .leaflet-top.leaflet-left {
+        top: 110px;
+    }
+}
+@media (max-width: 1025px) {
+     #apertura{
+        background-image: url('./portadaTab.svg');
+        height: 70vh;
+    }
+    .columna{
+        width: 70%;
+        margin: 50px auto 100px;
+    }
+    #crono {
+        width: 100%;
+        /* margin-right: -8%; */
+    }
+    #numeros{
+        width: 70%;
+    }
+    #tipos{
+        width: 70%;
+    }
+    #graficos{
+        width: 80%;
+    }
+    #prof{
+        width: 70%;
+    }
+    #cadena {
+        width: 90%;
+    }
+    h2{
+        width: 50%;
+    }
+    .bajada{
+        width: 50%;
+    }
+    .divLogo{
+        width: 55%;
+    }
+}
+@media (max-width: 950px) {
+    #apertura{
+        background-position: 50%;
+    }
+}
+@media (max-width: 900px) {
+    #map{
+        margin-top: 50px;
+    }
+    .legend { 
+        width:100%;
+        height:90px;
+    }
+    /* .leaflet-top.leaflet-left{
+        top: 20px;
+    } */
+    #filtrosMob { 
+        margin: auto;
+    }
+    #filtrosMob p{
+        width: 100%;
+    }
+    #filtrosMob .bots{
+        width: 100%; 
+        margin: 5px auto;
+    }
+    #numeros{
+        width: 90%;
+    }
+}
+@media (max-width: 800px) {
+    #apertura{
+        height: 80vh;
+        margin-bottom: 0px;
+        background-size: 100%;
+        background-position: center top;
+        /* background-image: url('./portadaMob.svg'); */
+    }
+    #textAper{
+        position: unset;
+        bottom: -10px;
+        margin-bottom: 50px;
+    }
+    h1{
+        font-size: 60px;
+        padding-top: 43vh;
+        text-align: center;
+        margin: auto;
+        width: 100%;
+    }
+    h2{
+        padding: 15px 7%;
+        width: 86%;
+        text-align: center;
+        margin: 10px auto 0;
+    }
+    h3 br, h4 br{
+        display: inline;
+    }
+    .bajada {
+        text-align: center;
+        width: 88%;
+        margin: auto;
+        padding: 25px 6%;
+    }
+    .divLogo{
+        margin: 15px auto;
+        width: 100%;
+        flex-direction: column;
+    }
+    #logoFopea{
+        margin: 0 auto 10px;
+    }
+    #uno::first-letter {
+        font-size: 75px;
+    }
+    
+    .columna{
+        width: 90%;
+    }
+    #crono {
+        width: 55%;
+        margin-right: auto;
+        margin-bottom: 10px;
+    }
+    #numeros{
+        width: 100%;
+    }
+    #graficos{
+        flex-direction: column;
+        width: 65%;
+    }
+    #graficos h4, .tituFrack{
+        font-size: 30px;
+    }
+    #graficos .graf{
+        margin: 0 auto 30px;
+    }
+    #tipos{
+        width: 90%;
+    }
+    #prof {
+        width: 85%;
+    }
+    #cadena {
+        width: 95%;
+        margin-top: 50px;
+    }
+    #mapaRef{ 
+        top: 160px;
+    }
+    .legend {
+        height: 130px;
+    }
+    .leaflet-top.leaflet-left {
+        top: 150px;
+    }
+    .refContainer{
+        width: 170px;
+    }
+    .refYPF, .refArg, .refExt {
+        width: 150px;
+    }
+    #footer .linea{
+        width: 80%;
+    }
+    #texFoo{
+        width: 80%;
+    }
+    .columna .tex{
+        z-index: 20;
+    }
+    #frackingSteps{
+        display: none;
+    }
+    #frackingStepsMob{
+        z-index: -1;
+        display: block;
+        margin-bottom: -30px;
+    }
+    #frackingStepsMob .stepMob{
+        font-family: "Roboto Flex", sans-serif;
+        font-size: 18px;
+        font-weight: 300;
+        line-height: 1.5;
+    }
+    #frackingStepsMob .stepMob span{
+        font-weight: 600;
+    }
+}
+@media (max-width: 700px) {
+    #apertura {
+        margin-bottom: 250px;
+    }
+}
+@media (max-width: 600px) {
+    #apertura{
+        margin-bottom: 90px;
+        background-size: 100%;
+        background-position: center -50px;
+    }
+    h1 {
+        padding-top: 40vh;
+    }
+    h3, #tituMapa{
+        width: 90%;
+        margin: 85px auto 25px;
+    }
+    .columna.ch{
+        margin-bottom: 30px;
+    }
+    #crono {
+        width: 85%;
+        margin: auto;
+    }
+    #numeros{
+        flex-direction: column;
+        width: 75%;
+    }
+    .numIzq, .numDer {
+        width: 75%;
+        min-height: unset;
+        margin: 20px auto;
+    }
+    /* .numIzq {
+        padding-bottom: 30px;
+    }
+    .numDer {
+        padding-top: 30px;
+    } */
+    .ref{
+        width: 95%;
+    }
+    .texNum {
+        width: 100%;
+    }
+    #tipos{
+        flex-direction: column;
+    }
+    #convencional{
+        margin-bottom: 40px;
+    }
+    #tipos .cuadro {
+        width: unset;
+    }
+    #tipos .cuadro ul {
+        padding-inline-start: 1.5em;
+        min-height: unset;
+    }
+    #tipos .cuadro ul li.texCuadro {
+        min-height: unset;
+        width: 95%;
+    }
+    #graficos{
+        width: 95%;
+    }
+    #graficos h4, .tituFrack{
+        font-size: 28px;
+    }
+    .aclara{
+        margin: -10px auto 30px;
+    }
+    .aclara br{
+        display: inline;
+    }
+    #prof {
+        width: 100%;
+        padding: 30px 0px 20px;
+    }
+    #prof #pozoProf {
+        margin: auto 0;
+        /* margin-left: -4.5%;
+        width: 109.5%; */
+    }
+    #prof .tex {
+        width: 85%;
+        letter-spacing: -.3px;
+        margin: 20px auto;
+    }
+    #cadena {
+        width: 90%;
+    }
+    .nombre, .fuente {
+        width: 90%;
+    }
+    .nombre br, .fuente br{
+        display: inline;
+    }
+    #map{
+        width: 85%;
+    }
+    #mapaRef{ 
+        width: 60px;
+        height: 111px;
+        top: 160px;
+        right: 5px;
+    }
+    .actualizacion.leaflet-control{
+        margin-bottom: 25px;
+    }
+    #filtrosMob .bots {
+        margin: auto;
+    }
+    .btn {
+        margin: 5px 0px;
+    }
+    .verT{ display: none; }
+    .t{ display: inline; }
+    .filtro-btn {
+        margin: 5px;
+    }
+    #frackingStepsMob .stepMob{
+        width: 85% !important;
+    }
+}
+@media (max-width: 550px) {
+    #apertura{
+        margin-bottom: 130px;
+    }
+}
+@media (max-width: 500px) {
+    #apertura{
+        background-position: center -30px;
+        margin-bottom: 50px;
+        height: 77vh;
+    }
+    h1{
+        font-size: 50px;
+        padding-top: 29vh;
+    }
+    h2{
+        padding: 15px 0;
+        width: 100%;
+        font-size: 23px;
+    }
+    h3{
+        width: 90%;
+    }
+    #graficos h4, .tituFrack{
+        font-size: 26px;
+    }
+    .leaflet-top.leaflet-left{
+        top: 150px;
+    }
+    /* #prof{
+        width: 95%;
+    } */
+    #cadena {
+        width: 100%;
+    }
+    #tipos {
+        width: 100%;
+    }
+}
+
+@media (max-width: 400px) {
+    #apertura{
+        margin-bottom: 120px;
+        background-size: 100%;
+        background-position: center -20px;
+        height: 90vh;
+    }
+    h1 {
+        line-height: 1;
+        padding-top: 33vh;
+    }
+    h2{
+        padding: 15px 0;
+        width: 100%;
+        font-size: 23px;
+    }
+    .numIzq, .numDer {
+        width: 80%;
+        padding: 30px 0;
+    }
+    #prof {
+        width: 100%;
+    }
+    #graficos {
+        margin: 70px auto;
+    }
+    .legend {
+        height: 160px;
+    }
+    #mapaRef {
+        top: 190px;
+    }
+    .leaflet-top.leaflet-left {
+        top: 180px;
+    }
+    .actualizacion.leaflet-control {
+        margin-bottom: 45px;
+    }
+    #numeros{
+        width: 100%;
+    }
+}
+@media (max-width: 350px) {
+    #apertura {
+        margin-bottom: 100px;
+        background-position: center top;
+        height: 72vh;
+    }
+    h1 {
+        padding-top: 28vh;
+        font-size: 40px;
+    }
+    h2 {
+        font-size: 20px;
+    }
+    h3, #tituMapa {
+        margin: 65px auto 25px;
+    }
+    .bajada {
+        font-size: 16px;
+    }
+    .legend {
+        height: 180px;
+    }
+    #crono {
+        width: 95%;
+    }
+    #filtrosMob .bots {
+        margin: auto;
+    }
+    .btn {
+        margin: 2px auto;
+    }
+    .filtro-btn {
+        margin: 2px 10px;
+    }
+    .leaflet-top.leaflet-left {
+        top: 200px;
+    }
+    .actualizacion.leaflet-control {
+        margin-bottom: 45px;
+    }
+    #mapaRef {
+        top: 210px;
+    }
+}
