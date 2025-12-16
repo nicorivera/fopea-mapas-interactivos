@@ -1,5 +1,6 @@
 # fopea-mapas-interactivos
 Mapas interactivos para el DJV Bootcamp de FOPEA sobre una investigación del yacimiento petrolífero Vaca Muerta.
+Esta visualización de una investigación periodística basada en datos fue elaborada durante el segundo semestre de 2025 en el ámbito de Data Journalism Visualization Bootcamp del Foro de Periodismo Argentino. El programa recibió el apoyo de la Embajada de Suiza en la Argentina.
 
 Para ver el especial [LINK ACA](https://vacamuertamotorargentino.fopea.org/)
 
@@ -13,6 +14,5 @@ Los archivos **geojson** fueron creados desde **generar_yacimientos_vm.py** corr
 > Para ver los mapas, mientras esten en desarrollo, levantar un servidor con `python3 -m http.server 8000`
 
 ### Vistas
-
-<img width="1451" height="739" alt="mapa3" src="https://github.com/user-attachments/assets/78d00734-1aa3-4130-a469-0a18f00ad5cd" />
-<img width="1450" height="737" alt="mapa4" src="https://github.com/user-attachments/assets/6978f1fd-45b6-4a0a-ba4c-59aa844ee3e5" />
+![mapa](https://github.com/user-attachments/assets/a4adff66-fc3c-4188-b781-4b61e96ed352)
+![mapa2](https://github.com/user-attachments/assets/e2245ee1-153b-4e25-a144-1f618ab1553c)
