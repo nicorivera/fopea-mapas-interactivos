@@ -1,6 +1,8 @@
 # fopea-mapas-interactivos
 Mapas interactivos para el DJV Bootcamp de FOPEA sobre una investigación del yacimiento petrolífero Vaca Muerta.
 
+Para ver el especial [LINK ACA](https://vacamuertamotorargentino.fopea.org/)
+
 ## Mapas
 
 Fueron creados con [Python](https://www.python.org/) y [Leaflet](https://leafletjs.com/)
